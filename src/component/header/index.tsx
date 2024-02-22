@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from "../../component/button";
 import Avt from '../../assets/logo/demo.png';
 import Hotpot from '../../assets/header/lau.jpg';

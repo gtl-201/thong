@@ -1,4 +1,4 @@
-import ItemList from './component/listItem'
+// import ItemList from './component/listItem'
 import Container from './container/home'
 
 export default function App() {
