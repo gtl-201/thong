@@ -12,7 +12,7 @@ const Header: React.FC<HeaderProps> = () => {
 
         <div className="w-full bg-[#FDF0E9] md:flex pt-5 pb-20 justify-center rounded-b-3xl">
             <div className="sm:w-full md:w-[60rem] px-5">
-                <div className="columns-3 gap-3 w-full md:flex content-center justify-between">
+                <div className="flex justify-between w-full content-center ">
                     <div className="content-center flex">
                         <div className="text-blue-500 tracking-wider text-3xl font-semibold font-Fredoka">Th</div>
                         <div className="text-red-500 tracking-wider text-3xl font-semibold font-Fredoka">ong</div>
@@ -27,8 +27,15 @@ const Header: React.FC<HeaderProps> = () => {
                         </div>
                     </div>
 
-                    <div className="">
-                        <Button text="Enjoy" />
+                    <div className="block md:hidden">
+                        <Button
+                            icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                                </svg>
+                                `}
+                            onclick={() => {
+                                console.log('menuBar Clicked');
+                            }} />
                     </div>
                 </div>
 
