@@ -18,16 +18,15 @@ const Header: React.FC<HeaderProps> = () => {
                         <div className="text-red-500 tracking-wider text-3xl font-semibold font-Fredoka">ong</div>
                     </div>
 
-                    <div className="hidden md:ml-6 md:block">
+                    <div className="hidden md:ml-6 sm:block">
                         <div className="flex space-x-4">
-                            <a href="#" className="hover:text-black text-[#7A787A] px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                            <a href="#" className="hover:text-black text-[#7A787A] px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                            <a href="#" className="hover:text-black text-[#7A787A] px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
-                            <a href="#" className="hover:text-black text-[#7A787A] px-3 py-2 text-sm font-medium" aria-current="page">Dashboard</a>
+                            <a href="#" className="hover:text-black text-[#7A787A] px-3 py-2 text-sm font-medium" aria-current="page">Home</a>
+                            <a href="#" className="hover:text-black text-[#7A787A] px-3 py-2 text-sm font-medium" aria-current="page">Menu</a>
+
                         </div>
                     </div>
 
-                    <div className="block md:hidden">
+                    <div className="block sm:hidden">
                         <Button
                             icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
