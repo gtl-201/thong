@@ -1,12 +1,15 @@
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 // import ItemList from './component/listItem'
-import Container from './container/home'
+import Menu from './container/menu'
+import Home from './container/home'
 
 export default function App() {
-  return <div className="w-full md:flex justify-center bg-[#FBFBFB]">
-
-
-    {/* <Button text='Click Me'/> */}
-    <Container />
-    {/* <ItemList /> */}
-  </div>
+  return (
+    <Router>
+      <Routes >
+        <Route path="/" Component={Home}/>
+        <Route path="/allMenu" Component={Menu}/>
+      </Routes>
+    </Router>
+  )
 }
