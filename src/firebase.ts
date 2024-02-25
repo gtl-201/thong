@@ -79,7 +79,7 @@ class FirestoreService {
   };
 
   get = async (collectionName: string): Promise<any> => {
-    console.log('get Coll');
+
     const coll = collection(this.db, collectionName);
     const docs = await getDocs(coll);
     const res = docs.docs.map(doc => ({ ...doc.data(), id: doc.id }));
@@ -103,6 +103,26 @@ class FirestoreService {
     }
     catch (error) {
       return Promise.reject(error);
+    }
+  };
+
+  getMultiCollection = async (collections: string[]): Promise<any[]> => {
+    try {
+      // Record<string, any[]>
+      const mergedData: any = {};
+      for (const coll of collections) {
+        const collectionRef = collection(this.db, coll);
+        const querySnapshot = await getDocs(collectionRef);
+        mergedData[coll] = [];
+        querySnapshot.forEach((doc) => {
+          mergedData[coll].push({ id: doc.id, ...doc.data() });
+        });
+      }
+
+      return mergedData;
+    } catch (error) {
+      console.error('Error searching documents:', error);
+      throw error;
     }
   };
 

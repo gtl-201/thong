@@ -1,16 +1,11 @@
 // import { Link } from "react-router-dom";
-import { useEffect } from "react";
+
 import Button from "../../component/button";
 import Header from "../../component/header";
 import ListItem from "../../component/listItem";
-import { firestore } from "../../firebase";
+
 
 export default function Home() {
-    useEffect(() => {
-        firestore.get('meat').then((x) => console.log(x)
-        )
-    }, [])
-
     return (
         <div className="w-full bg-[#FBFBFB]">
             <Header headerOnly={true}></Header>

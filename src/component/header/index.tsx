@@ -22,10 +22,10 @@ const Header: React.FC<HeaderProps> = ({ headerOnly }) => {
                     <div className="hidden md:ml-6 sm:block">
                         <div className="flex space-x-4">
                             <Link to='/'
-                                style={useLocation().pathname == '/' ? { color: 'black' } : { color: '#7A787A' }}
+                                style={{ color:useLocation().pathname == '/' ? 'black':  '#7A787A'}}
                                 className="hover:text-black px-3 py-2 text-sm font-medium" aria-current="page">Home</Link>
                             <Link to='/allMenu'
-                                style={useLocation().pathname == '/allMenu' ? { color: 'black' } : { color: '#7A787A' }}
+                                style={{ color:useLocation().pathname == '/allMenu' ? 'black':  '#7A787A'}}
                                 className="hover:text-black px-3 py-2 text-sm font-medium" aria-current="page">Menu</Link>
 
                         </div>
