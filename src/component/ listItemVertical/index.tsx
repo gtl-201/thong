@@ -58,7 +58,7 @@ const ItemListVertical: React.FC<ItemListVerticalProps> = () => {
         <div className="w-full bg-[#F5F5F5] flex flex-col items-center">
             {Object.entries(fakeData).map((item) => {
                 return (
-                    <div className="flex bg-[#FFFFFF] mb-[2px] px-2 py-3 items-center shadow-lg w-[100%] md:w-[90%] lg:w-[80%] md:rounded-lg" key={item[0]}>
+                    <div className="flex bg-[#FFFFFF] mb-[2px] px-2 py-3 items-center shadow-lg w-[100%] md:w-[90%] lg:w-[80%] md:rounded-lg md:my-2" key={item[0]}>
                         <img src={item[1].url ? item[1].url : fakeImg} alt="" className="w-[7rem] h-[7rem] rounded-lg " />
                         <div className="pl-3 w-full">
                             <div className="font-Fredoka font-semibold text-[22px]">{item[1].name ? item[1].name : ''}</div>

@@ -4,11 +4,12 @@ import Menu from './container/menu'
 import Home from './container/home'
 
 export default function App() {
+
   return (
     <Router>
       <Routes >
-        <Route path="/" Component={Home}/>
-        <Route path="/allMenu" Component={Menu}/>
+        <Route path="/" Component={Home} />
+        <Route path="/allMenu" Component={Menu} />
       </Routes>
     </Router>
   )
