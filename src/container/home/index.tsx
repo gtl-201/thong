@@ -4,6 +4,7 @@ import Button from "../../component/button";
 import Header from "../../component/header";
 import ListItem from "../../component/listItem";
 import { firestore } from "../../firebase";
+import { Link } from "react-router-dom";
 
 interface Combo {
     id: string;
@@ -45,9 +46,11 @@ export default function Home() {
                 </div>
                 <div className="flex items-center text-wrap ">
                     Còn rất nhiều món ngon khác trong
-                    <div className="mx-1">
-                        <Button text="Menu" onclick={() => { window.location.href = '/allMenu' }}></Button>
-                    </div>
+                    {/* <div className="mx-1"> */}
+                    <Link to='/allMenu' className="mx-1" aria-current="page">
+                        <Button text="Menu"></Button>
+                    </Link>
+                    {/* </div> */}
                     <div className="hidden sm:block">
                         (Bấm để xem ngay)
                     </div>

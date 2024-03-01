@@ -82,7 +82,7 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
                     })
                     : loading && loading === true
                         ? <div className="flex justify-center bg-[#E8DFDD] w-full"><img src={loadingGif} alt="" className="w-[200px]" /></div>
-                        : <div className="flex bg-[#FFFFFF] justify-center w-full font-Fredoka text-3xl py-7 text-red-400 uppercase">
+                        : <div className="flex text-center bg-[#FFFFFF] justify-center w-full font-Fredoka text-3xl py-7 text-red-400 uppercase">
                             Hiện tại chưa có món nào!
                         </div>
                 }
