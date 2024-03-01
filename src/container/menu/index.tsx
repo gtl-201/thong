@@ -8,13 +8,16 @@ export default function Menu() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const [data, setData] = useState<{ [key: string]: any } | null>(null);
     const [collection, setCollection] = useState('meat')
-    useEffect(() => {
+    const [loading, setLoading] = useState(true)
+    useEffect(() => { 
         firestore.getMultiCollection(['meat', 'drink', 'sideDishes']).then(data => {
             setData(data)
+            setLoading(false)
         }).catch(error => {
             console.error('Error fetching data:', error);
             const tmp: [] = [];
             setData(tmp)
+            setLoading(false)
         });
 
     }, [])
@@ -95,7 +98,9 @@ export default function Menu() {
                 </div>
             }
 
-            <ListItem data={
+            <ListItem
+            loading={loading}
+            data={
                 (dataOnSearch.length != 0 && searchKeyword !== '')
                     ? dataOnSearch
                     : (dataOnSearch.length == 0 && searchKeyword !== '')

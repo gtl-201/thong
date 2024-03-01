@@ -79,12 +79,15 @@ class FirestoreService {
   };
 
   get = async (collectionName: string): Promise<any> => {
-
-    const coll = collection(this.db, collectionName);
-    const docs = await getDocs(coll);
-    const res = docs.docs.map(doc => ({ ...doc.data(), id: doc.id }));
-    return res;
-
+    try{
+      const coll = collection(this.db, collectionName);
+      const docs = await getDocs(coll);
+      const res = docs.docs.map(doc => ({ ...doc.data(), id: doc.id }));
+      return res;
+    } catch (error) {
+      console.error('Error searching documents:', error);
+      throw error;
+    }
   };
 
   getByDoc = async (collectionName: string, id: string): Promise<any> => {
@@ -125,6 +128,28 @@ class FirestoreService {
       throw error;
     }
   };
+  
+  getMultiByDoc = async (collectionIds: { collectionName: string, id: string }[]): Promise<any[]> => {
+    try {
+        const results: any[] = [];
+
+        // Lặp qua từng cặp collectionName và id
+        for (const { collectionName, id } of collectionIds) {
+            const coll = doc(this.db, collectionName, id);
+            const docSnap = await getDoc(coll);
+            if (docSnap.exists()) {
+                results.push({ id: docSnap.id, ...docSnap.data() });
+            } else {
+                console.log(`Document ${id} in collection ${collectionName} does not exist`);
+            }
+        }
+
+        return results;
+    } catch (error) {
+        console.error('Error getting documents:', error);
+        throw error;
+    }
+};
 
   createUser = async (user: any): Promise<any | any> => {
 

@@ -1,11 +1,41 @@
-// import { Link } from "react-router-dom";
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useEffect, useState } from "react";
 import Button from "../../component/button";
 import Header from "../../component/header";
 import ListItem from "../../component/listItem";
+import { firestore } from "../../firebase";
+
+interface Combo {
+    id: string;
+    name: string;
+    include: {
+        id: string;
+        name: string;
+        prices: string;
+        url: string;
+    }[];
+    prices: string;
+    url: string
+}
 
 
 export default function Home() {
+    const [data, setData] = useState<Combo[] | undefined>(undefined);
+    const [loading, setLoading] = useState(true)
+    useEffect(() => {
+        firestore.get('combo').then(data => {
+            setData(data)
+            setLoading(false)
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+            const tmp: [] = [];
+            setData(tmp)
+            setLoading(false)
+        });
+
+    }, [])
+    // console.log(data);
+
     return (
         <div className="w-full bg-[#FBFBFB]">
             <Header headerOnly={true}></Header>
@@ -23,7 +53,10 @@ export default function Home() {
                     </div>
                 </div>
             </div>
-            <ListItem></ListItem>
+            <ListItem
+                loading={loading}
+                data={data}
+            />
         </div>
     )
 }
