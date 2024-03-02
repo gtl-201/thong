@@ -79,22 +79,22 @@ export default function Menu() {
                 : <div className="flex justify-between my-2">
                     <div onClick={() => setCollection('meat')}
                         style={{ color: collection == 'meat' ? 'black' : '#7A787A' }}
-                        className="hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac loai Thit</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac loai Thit</div>
                     <div className="border-r-2 w-0" />
 
                     <div onClick={() => setCollection('')}
                         style={{ color: collection == '' ? 'black' : '#7A787A' }}
-                        className="hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac loai Vien</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac loai Vien</div>
                     <div className="border-r-2 w-0" />
 
                     <div onClick={() => setCollection('sideDishes')}
                         style={{ color: collection == 'sideDishes' ? 'black' : '#7A787A' }}
-                        className="hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Do an kem</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Do an kem</div>
                     <div className="border-r-2 w-0" />
 
                     <div onClick={() => setCollection('drink')}
                         style={{ color: collection == 'drink' ? 'black' : '#7A787A' }}
-                        className="hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac Loai Nuoc</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac Loai Nuoc</div>
                 </div>
             }
 

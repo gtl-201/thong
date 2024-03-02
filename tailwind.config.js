@@ -8,7 +8,7 @@ export default {
     extend: {
       fontFamily:{
         'Fredoka': 'Fredoka'
-      }
+      },
     },
   },
   plugins: [],

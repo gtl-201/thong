@@ -79,7 +79,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
             <div className="flex justify-between w-full mb-8">
                 <div className='font-Fredoka font-semibold text-[21px]'>Các món đã chọn</div>
                 <div
-                    className='font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
+                    className='cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
                     onClick={() => removeAllItem()}
                 >
                     Xoá toàn bộ
@@ -110,11 +110,11 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                                 <div className='flex justify-left items-center'>
                                     <div
                                         onClick={() => updateCount(item.id, item.name, item.count ? item.count + 1 : 1)}
-                                        className='rounded-full bg-green-500 text-white w-5 h-5 flex justify-center items-center mr-1 hover:scale-110 duration-200'>+</div>
+                                        className='cursor-pointer rounded-full bg-green-500 text-white w-5 h-5 flex justify-center items-center mr-1 hover:scale-110 duration-200'>+</div>
                                     {item.count ? item.count : 1}
                                     <div
                                         onClick={() => updateCount(item.id, item.name, item.count && item.count != 1 ? item.count - 1 : 1)}
-                                        className='rounded-full bg-[#EA5958] text-white w-5 h-5 flex justify-center items-center ml-1 hover:scale-110 duration-200'>-</div>
+                                        className='cursor-pointer rounded-full bg-[#EA5958] text-white w-5 h-5 flex justify-center items-center ml-1 hover:scale-110 duration-200'>-</div>
                                 </div>
                             </div>
 
@@ -124,7 +124,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                         <div className='text-right'>
                             <div className='font-Fredoka font-normal text-[21px]'>{item.prices ? formatPrices(item.prices) + '₫' : 'null'}</div>
                             <div
-                                className='font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
+                                className='cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
                                 onClick={() => removeItem(item.id, item.name, 'dataOrder')}
                             >
                                 Xoá

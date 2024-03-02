@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({ text, icon, bg, textSize, bgIcon, icPos
 
   return (
     <div onClick={onclick ? () => onclick() : () => { }}
-      className="w-fit drop-shadow-md flex items-center rounded-full bg-[#EA5958] px-1 py-1 text-[#FFFCFF] transition ease-in-out hover:scale-110 duration-200"
+      className="cursor-pointer w-fit drop-shadow-md flex items-center rounded-full bg-[#EA5958] px-1 py-1 text-[#FFFCFF] transition ease-in-out hover:scale-110 duration-200"
       style={bg ? { backgroundColor: bg } : {}}
     >
       {icPosition === undefined && icon ? <div style={bgIcon? {backgroundColor: bgIcon} : {backgroundColor: '#FACA62'}} className="p-1 rounded-full text-black" dangerouslySetInnerHTML={{ __html: icon }} /> : null}

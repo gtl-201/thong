@@ -42,7 +42,7 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
                 {(data && data.length != 0)
                     ? data.map((item) => {
                         return (
-                            <div key={item.id} onClick={() => AddToOrder(item)} className='flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
+                            <div key={item.id} onClick={() => AddToOrder(item)} className='cursor-pointer flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
                                 <div className='shadow-lg w-[12.5rem] h-[12.5rem] overflow-hidden rounded-full border-[12px] border-[#E95758] absolute ml-[3.5rem] -mt-[3.5rem]'>
                                     <img src={item.url ? item.url : imgtmp} alt="" className='min-h-[12.5rem] min-w-[12.5rem] shadow-inner' />
                                 </div>
@@ -71,7 +71,7 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
                                         <div className='font-Fredoka font-medium text-[25px] text-wrap tracking-wide capitalize'>
                                             {item.prices ? formatCurrency(parseInt(item.prices)) : 'Null'}
                                         </div>
-                                        <div className='flex' onClick={(e) => e.stopPropagation()}>
+                                        <div className='flex cursor-pointer' onClick={(e) => e.stopPropagation()}>
                                             <Link
                                                 to={{
                                                     pathname: '/detailFood',
