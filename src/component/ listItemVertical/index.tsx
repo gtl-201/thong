@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "../button";
 import fakeImg from "../../assets/header/lau.jpg"
-import { limitWords, formatPrices } from "../../utils";
+import { limitWords, formatPrices, AddToOrder } from "../../utils";
 import loadingGif from '../../assets/loading/main.gif'
 interface ItemListVerticalProps {
     loading: boolean;
@@ -27,7 +27,7 @@ const ItemListVertical: React.FC<ItemListVerticalProps> = ({ data, loading }) =>
                                 <div className="w-full font-Fredoka font-normal text-[15px] text-[#A9A9A9] text-wrap hover:text-black">{limitWords(item.desc ? item.desc : `Bao Gom: Thi bo 3 chi, Thit bo My, Thit Lon 3 Chi, Sot Trung muoi, Rau, Banh Mi, Kim Chi, Nam Kim Cham`, 18)}</div>
                                 <div className="font-Fredoka w-full flex justify-between pt-3">
                                     <div>{item.prices ? formatPrices(item.prices) : '??'} vnd</div>
-                                    <Button text="+"></Button>
+                                    <Button text="+" onclick={()=>AddToOrder(item)}></Button>
                                 </div>
                             </div>
                         </div>

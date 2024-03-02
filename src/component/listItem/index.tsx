@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import imgtmp from '../../assets/header/lau.jpg';
 import loadingGif from '../../assets/loading/main.gif'
 import Button from '../button';
-import { formatCurrency } from '../../utils';
+import { AddToOrder, formatCurrency } from '../../utils';
 import { Link } from 'react-router-dom';
 
 interface ItemListProps {
@@ -18,15 +19,22 @@ interface ItemListProps {
         url: string;
         prices: string
     }[];
-    loading: boolean
+    dataOrder?: {
+        id: string;
+        name: string;
+        include: {
+            name: string;
+            id: string;
+            prices: string;
+            url: string;
+        }[];
+        url: string;
+        prices: string
+    };
+    loading: boolean;
 }
 
 const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
-    //   const [clicked, setClicked] = useState(false);
-
-    const handleClick = () => {
-        console.log('Add to card order');
-    };
 
     return (
         <div className='flex justify-center'>
@@ -34,7 +42,7 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
                 {(data && data.length != 0)
                     ? data.map((item) => {
                         return (
-                            <div key={item.id} onClick={() => handleClick()} className='flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
+                            <div key={item.id} onClick={() => AddToOrder(item)} className='flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
                                 <div className='shadow-lg w-[12.5rem] h-[12.5rem] overflow-hidden rounded-full border-[12px] border-[#E95758] absolute ml-[3.5rem] -mt-[3.5rem]'>
                                     <img src={item.url ? item.url : imgtmp} alt="" className='min-h-[12.5rem] min-w-[12.5rem] shadow-inner' />
                                 </div>
