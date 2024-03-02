@@ -1,9 +1,5 @@
 import React from 'react';
-import imgtmp from '../../assets/header/lau.jpg';
-import loadingGif from '../../assets/loading/main.gif'
 import Button from '../button';
-import { formatCurrency } from '../../utils';
-import { Link } from 'react-router-dom';
 
 interface ListOrderProps {
     id?: string
@@ -15,6 +11,8 @@ const ListOrder: React.FC<ListOrderProps> = ({ id }) => {
     // const handleClick = () => {
     //     console.log('Add to card ListOrder');
     // };
+    console.log(id);
+    
 
     return (
         <div className="flex flex-wrap p-5 rounded-lg mb-24 w-[100%] md:w-[95%] lg:w-[60rem] justify-center bg-[#FFFEFA]">
