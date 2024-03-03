@@ -44,8 +44,8 @@ class FirestoreService {
 
       const docRef = await addDoc(db, data);
 
-      this.update(collectionName, docRef.id, { id: docRef.id });
-
+      // this.update(collectionName, docRef.id, { id: docRef.id });
+      localStorage.setItem('idBill', docRef.id )
       return Promise.resolve({ ...data, id: docRef.id });
     }
     catch (error) {
@@ -53,6 +53,33 @@ class FirestoreService {
     }
 
   };
+
+//   addWithSpecialId = async (collectionName: string, data: any): Promise<any> => {
+//     try {
+//         const db = collection(this.db, collectionName);
+
+//         // Lấy danh sách tài liệu được sắp xếp theo ID giảm dần với giới hạn là 1
+//         const q = query(db, orderBy('id', 'desc'), limit(1));
+//         const querySnapshot = await getDocs(q);
+
+//         let highestId = 0;
+//         querySnapshot.forEach(doc => {
+//             highestId = doc.data().id;
+//         });
+
+//         // Tạo ID mới cho tài liệu mới
+//         const newId = highestId + 1;
+//         // Thêm tài liệu mới với ID mới được tạo ra
+
+//         // const newDocRef = await addDoc(db, data);
+//         const newDocRef = await addDoc(db, { ...data, id: newId });
+//         // this.update(collectionName, newDocRef.id, { id: newId });
+
+//         return Promise.resolve({ ...data, id: newId });
+//     } catch (error) {
+//         return Promise.reject(error);
+//     }
+// };
 
 
   update = async (collectionName: string, docName: string, data: any): Promise<any> => {

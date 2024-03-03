@@ -4,8 +4,6 @@ import ListOrder from "../../component/listOrder";
 
 
 export default function Order() {
-
-
     return (
         <div className='flex flex-col items-center w-full bg-[#F5F5F5]'>
             <Header headerOnly={false}></Header>

@@ -1,8 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../button';
 import { formatPrices, removeAllOrder, removeItemOrder } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
+import { firestore } from '../../firebase';
 
 interface ListOrderProps {
     data?: {
@@ -28,15 +29,58 @@ interface ListOrderProps {
 const ListOrder: React.FC<ListOrderProps> = () => {
 
     const [data, setData] = useState(localStorage.getItem('dataOrder'))
-    const sumAllPrices = (): string => {
+    const [billInprocessData, setBillInprocessData] = useState<any>()
+    useEffect(() => {
+        getBillInprocess()
+    }, [])
+
+
+    const getBillInprocess = () => {
+        const idBill = localStorage.getItem('idBill') || '';
+        firestore.getByDoc('bill', idBill).then(billInprocessData_1 => {
+            // console.log(billInprocessData_1.status); 
+            if (billInprocessData_1.status && billInprocessData_1.status === 'unPay') {
+                setBillInprocessData(billInprocessData_1)
+                return billInprocessData_1
+            }
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+    const mergeDataAndUpdateBill = (data1: any[], data2: any): any => {
+        // Duyệt qua từng phần tử trong data1
+        data1.forEach(item1 => {
+            // Kiểm tra xem có phần tử nào trong listDishes của data2 có cùng 'id' và 'name' với item1 không
+            const existingItemIndex = data2.listDishes.findIndex((item2: any) => item2.id === item1.id && item2.name === item1.name);
+            if (existingItemIndex !== -1) {
+                // Nếu tìm thấy phần tử có 'id' và 'name' giống nhau, cộng count của item1 vào count của phần tử tương ứng trong data2
+                data2.listDishes[existingItemIndex].count += item1.count;
+            } else {
+                // Nếu không tìm thấy, thêm item1 vào cuối listDishes của data2
+                data2.listDishes.push(item1);
+            }
+        });
+        console.log(data2, 'biiiiiii');
+        const idBill = localStorage.getItem('idBill') || '';
+        firestore.update('bill', idBill, data2).then(() => {
+            removeAllItem()
+            getBillInprocess()
+        }).catch(error => {
+            console.log(error);
+        })
+
+        return data2;
+    };
+
+    const sumAllPrices = (dataSum: any): string => {
         // Lấy dữ liệu từ localStorage
         let totalPrice = 0;
-        if (data) {
+        if (dataSum) {
             // Chuyển đổi dữ liệu từ chuỗi JSON thành một mảng
-            const dataArray: any[] = JSON.parse(data);
+            const dataSumArray: any[] = JSON.parse(dataSum);
 
             // Duyệt qua mảng để tính tổng giá của các mặt hàng
-            dataArray.forEach(item => {
+            dataSumArray.forEach(item => {
                 // Kiểm tra xem mặt hàng có count lớn hơn 1 không
                 if (item.count && item.count > 1 && item.prices) {
                     // Nếu có, tính tổng giá bằng giá của mặt hàng nhân với count
@@ -50,7 +94,6 @@ const ListOrder: React.FC<ListOrderProps> = () => {
 
         return formatPrices(totalPrice.toString())
     }
-
     const removeAllItem = () => {
         removeAllOrder('dataOrder');
         setData(null);
@@ -73,10 +116,46 @@ const ListOrder: React.FC<ListOrderProps> = () => {
         localStorage.setItem('dataOrder', JSON.stringify(dataParsed));
     };
 
+    const createBill = (dataBill: {
+        id: string;
+        name: string;
+        include?: {
+            name: string;
+            id: string;
+            prices: string;
+            url: string;
+        }[];
+        desc?: string;
+        url: string;
+        prices: string;
+    }[]
+    ) => {
+        // const timestamp_now = serverTimestamp();
+        const intervalId = new Date();
+        const newDataBill = {
+            listDishes: dataBill,
+            status: 'unPay',
+            table: 2,
+            timeJoin: intervalId,
+            timeOut: null
+        };
+
+        console.log(newDataBill);
+
+        firestore.add('bill', newDataBill).then(billData_1 => {
+            localStorage.removeItem('dataOrder')
+            setData(null)
+            getBillInprocess()
+            console.log('added bill', billData_1);
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+
 
     return (
-        <div className="flex flex-wrap p-5 rounded-lg mb-24 w-[100%] md:w-[95%] lg:w-[60rem] justify-center bg-[#FFFEFA]">
-            <div className="flex justify-between w-full mb-8">
+        <div className="flex flex-wrap py-5 rounded-lg mb-24 w-[100%] md:w-[95%] lg:w-[60rem] justify-center bg-[#FFFEFA]">
+            <div className="flex justify-between w-full mb-8 px-5">
                 <div className='font-Fredoka font-semibold text-[21px]'>Các món đã chọn</div>
                 <div
                     className='cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
@@ -86,20 +165,21 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                 </div>
             </div>
 
-            {data && JSON.parse(data).map((item: any) => {
+            {/* Các Mon đã Chọn */}
+            {data ? JSON.parse(data).map((item: any, key: number) => {
                 return (
-                    <div key={item.key} className='flex justify-between w-full my-2'>
+                    <div key={key} className='flex justify-between w-full my-2 px-5'>
                         <div className='flex'>
                             <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
-                                <img src={item.url ? item.url : fakeImg} alt="unloaded" className='w-full' />
+                                <img src={item.url ? item.url : fakeImg} alt="unloaded" className='w-24' />
                             </div>
                             <div className='overflow-hidden'>
                                 <div className='font-Fredoka font-semibold text-[22px]'>{item.name ? item.name : 'null'}</div>
                                 <div className='w-full font-Fredoka font-normal text-[15px] text-[#A9A9A9] text-wrap hover:text-black'>
                                     {item.desc && item.desc}
-                                    {item.include && item.include.map((itemInclude: any) => {
+                                    {item.include && item.include.map((itemInclude: any, key: number) => {
                                         return (
-                                            <div key={itemInclude.id} className="flex items-center">
+                                            <div key={key} className="flex items-center">
                                                 <img className="w-5 rounded-md mr-1" src={itemInclude.url ? itemInclude.url : fakeImg} alt="" />
                                                 {itemInclude.name ? itemInclude.name + '-' : 'null-'}
                                                 {itemInclude.prices ? formatPrices(itemInclude.prices) + 'VND' : 'null'}
@@ -132,27 +212,88 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                         </div>
                     </div>
                 )
-            })}
+            })
+                : <div>Bạn chưa chọn món nào</div>}
 
-
-            <div className='flex justify-between w-full border-t-2 mt-5 pt-3 items-center'>
+            {/* Tổng tiền & Nút Gọi Món */}
+            <div className='mx-5 flex justify-between w-full border-t-2 mt-5 pt-3 items-center'>
                 <div>
                     <div className='font-Fredoka font-normal text-[18px]'>Tổng cộng</div>
                     <div className='font-Fredoka font-semibold text-[24px] text-blue-600 flex'>
-                        <div>{sumAllPrices()}</div>
+                        <div>{sumAllPrices(data)}</div>
                         <div className='text-red-500 ml-1'>VND</div>
                         {/* {formatPrices(sumAllPrices().toString())} VND */}
                     </div>
                 </div>
-                <Button text="Gọi Luôn"
+                <Button
+                    text={billInprocessData && billInprocessData !== null ? 'Gọi Thêm' : "Gọi Luôn"}
                     icPosition='right'
                     // bgIcon='#EA5958'
                     icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         `}
+                    onclick={() => {
+                        if (data) {
+                            billInprocessData && billInprocessData !== null
+                                ? mergeDataAndUpdateBill(data ? JSON.parse(data) : [], billInprocessData)
+                                : createBill(JSON.parse(data));
+                        } else {
+                            console.error('Error: Data is null');
+                        }
+                    }
+                    }
                 />
             </div>
+
+
+            {/* Các Món Đã Gọi */}
+            {billInprocessData && billInprocessData !== null &&
+                <div className='px-5 w-full mt-10 pt-5 border-t-2 border-orange-400'>
+                    <div className='font-Fredoka font-semibold text-[21px] w-full text-center uppercase text-red-500'>Các món đã gọi</div>
+                    {billInprocessData.listDishes.map((itemBillInprocess: any, key: number) => {
+                        return (
+                            <div className='flex w-full justify-between mt-4' key={key}>
+                                <div className='flex'>
+                                    <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
+                                        <img src={itemBillInprocess.url ? itemBillInprocess.url : fakeImg} alt="unloaded" className='w-24' />
+                                    </div>
+                                    <div className='overflow-hidden'>
+                                        <div className='font-Fredoka font-semibold text-[22px]'>{itemBillInprocess.name ? itemBillInprocess.name : 'null'}</div>
+                                        <div className='w-full font-Fredoka font-normal text-[15px] text-[#A9A9A9] text-wrap hover:text-black'>
+                                            {itemBillInprocess.desc && itemBillInprocess.desc}
+                                            {itemBillInprocess.include && itemBillInprocess.include.map((itemInclude: any, key: number) => {
+                                                return (
+                                                    <div key={key} className="flex items-center">
+                                                        <img className="w-5 rounded-md mr-1" src={itemInclude.url ? itemInclude.url : fakeImg} alt="" />
+                                                        {itemInclude.name ? itemInclude.name + '-' : 'null-'}
+                                                        {itemInclude.prices ? formatPrices(itemInclude.prices) + 'VND' : 'null'}
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='text-right pt-2'>
+                                    <div className='font-Fredoka font-normal text-[21px]'>{itemBillInprocess.prices ? formatPrices(itemBillInprocess.prices) + '₫' : 'null'}</div>
+                                    x{itemBillInprocess.count ? itemBillInprocess.count : 1}
+                                </div>
+                            </div>
+                        )
+                    }
+                    )}
+                    {/* Tổng tiền hoá đơn */}
+                    <div className='w-full border-t-2 mt-5 pt-3 items-center'>
+                        <div className='font-Fredoka font-normal text-[18px]'>Tổng cộng</div>
+                        <div className='font-Fredoka font-semibold text-[24px] text-blue-600 flex'>
+                            <div>{sumAllPrices(JSON.stringify(billInprocessData.listDishes))}</div>
+                            <div className='text-red-500 ml-1'>VND</div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
         </div>
     );
 }

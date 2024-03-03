@@ -40,9 +40,9 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
         <div className='flex justify-center'>
             <div className="flex flex-wrap mt-[2rem] w-[60rem] justify-center">
                 {(data && data.length != 0)
-                    ? data.map((item) => {
+                    ? data.map((item: any, key: number) => {
                         return (
-                            <div key={item.id} onClick={() => AddToOrder(item)} className='cursor-pointer flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
+                            <div key={key} onClick={() => AddToOrder(item)} className='cursor-pointer flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
                                 <div className='shadow-lg w-[12.5rem] h-[12.5rem] overflow-hidden rounded-full border-[12px] border-[#E95758] absolute ml-[3.5rem] -mt-[3.5rem]'>
                                     <img src={item.url ? item.url : imgtmp} alt="" className='min-h-[12.5rem] min-w-[12.5rem] shadow-inner' />
                                 </div>
@@ -53,11 +53,9 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
                                     <div className='font-Fredoka font-bold text-[22px] text-wrap tracking-wide capitalize '>{item.name}</div>
                                     <div className='flex flex-col'>
                                         {item.include && item.include.length != 0
-                                            ? item.include.map((item2) => {
-                                                console.log(item2);
-
+                                            ? item.include.map((item2:any, key:number) => {
                                                 return (
-                                                    <div key={item2.id} className="flex justify-between">
+                                                    <div key={key} className="flex justify-between">
                                                         {/* <div>{item2.url ? item2.url : 'ko co'}</div> */}
                                                         <div>{item2.name ? item2.name : 'Null'}</div>
                                                         <div>{item2.prices ? item2.prices : 'Null'}</div>

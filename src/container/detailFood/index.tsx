@@ -30,10 +30,9 @@ export default function DetailFood() {
                         <div className="font-Fredoka font-normal text-[18px] -mt-2">{data && data.desc
                             ? data.desc
                             : data.include
-                                ? data.include.map((item: any) => {
-                                    console.log(item, '......');
+                                ? data.include.map((item: any, key:number) => {
                                     return (
-                                        <div key={item.id} className="flex items-center mt-2">
+                                        <div key={key} className="flex items-center mt-2">
                                             <img className="w-12 rounded-md" src={item.url ? item.url : loadingGif} alt="" />
                                             <div className="pl-3">
                                                 {item.name ? item.name : 'null'}
