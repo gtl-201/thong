@@ -18,6 +18,7 @@ export default function App() {
         <Route path="/detailFood" Component={DetailFood} />
         <Route path="/order" Component={Order} />
       </Routes>
+      <div id='notifyContainer' className='fixed top-10 right-2'></div>
     </Router>
   )
 }

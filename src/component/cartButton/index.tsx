@@ -11,17 +11,22 @@ const CardButton: React.FC<CardButtonProps> = ({ onclick }) => {
   const [localStorageData, setLocalStorageData] = useState<string | null>(
     localStorage.getItem('dataOrder')
   );
+  const [animated, setAnimated] = useState(false)
 
   const handleStorageChange = () => {
     const data = localStorage.getItem('dataOrder');
     setLocalStorageData(data);
+    setAnimated(true)
+    setTimeout(() => {
+      setAnimated(false)
+    }, 300);
   };
 
   useEffect(() => {
-   const ev = event.addEvent('storage', handleStorageChange);
+    const ev = event.addEvent('storage', handleStorageChange);
 
     return () => {
-      event.removeEvent('storage',ev);
+      event.removeEvent('storage', ev);
     };
   }, []);
 
@@ -29,12 +34,18 @@ const CardButton: React.FC<CardButtonProps> = ({ onclick }) => {
     if (localStorageData) {
       const parsedData = JSON.parse(localStorageData);
       setCount(parsedData.length);
+    }else{
+      setCount(0);
     }
   }, [localStorageData]);
 
 
   return (
     <div onClick={onclick ? () => onclick() : () => { }}
+      style={animated ? {
+        transform: 'scale(1.2)', /* Phóng to */
+        transition: 'transform 1s ease-in -out', /* Hiệu ứng diễn ra trong 2s */
+      } : {}}
       className="cursor-pointer z-50 fixed bottom-3 -left-1 w-fit drop-shadow-lg flex items-center rounded-r-full bg-[#EA5958] px-1 py-1 text-[#FFFCFF] transition ease-in-out hover:scale-110 duration-200"
     >
       <div className="py-1 pr-2 pl-0 rounded-r-full text-black bg-[#FACA62]">
@@ -45,7 +56,7 @@ const CardButton: React.FC<CardButtonProps> = ({ onclick }) => {
         {/* {count ? JSON.parse(count) : 0} */}
         {count}
       </div>
-    </div>
+    </div >
   );
 }
 

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 class Events {
   stacks = {} as { [key: string]: { key: string | number, callback: any }[] }; // Mảng lưu các callback dựa theo key
   addEvent = (key: string, callback: (...args: any[]) => any) => { // hàm thêm event vào stacks
