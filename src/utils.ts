@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import { event } from "./EventEmitter";
+
 export const limitWords = (str: any, limit: number) => {
     const words = str.split(' ');
     if (words.length > limit) {
@@ -84,6 +86,8 @@ export const AddToOrder = (
     }
 
     console.log('!!!!!!!!', localStorage.getItem('dataOrder'));
+    event.emit('storage');
+    
 };
 
 export const removeAllOrder = (storageKey: string) => {

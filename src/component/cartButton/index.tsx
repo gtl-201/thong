@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { event } from '../../EventEmitter';
 
 
 interface CardButtonProps {
@@ -15,12 +16,12 @@ const CardButton: React.FC<CardButtonProps> = ({ onclick }) => {
     const data = localStorage.getItem('dataOrder');
     setLocalStorageData(data);
   };
-  
+
   useEffect(() => {
-    window.addEventListener('storage', handleStorageChange);
-    
+   const ev = event.addEvent('storage', handleStorageChange);
+
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
+      event.removeEvent('storage',ev);
     };
   }, []);
 
