@@ -2,7 +2,7 @@
 import { getAnalytics } from 'firebase/analytics';
 import { FirebaseApp, initializeApp } from 'firebase/app';
 import { Firestore, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, setDoc, updateDoc } from 'firebase/firestore/lite';
-import { FirebaseStorage, StorageReference, getDownloadURL, getStorage, ref, uploadBytes, } from 'firebase/storage';
+import { FirebaseStorage, StorageReference, UploadMetadata, getDownloadURL, getStorage, ref, uploadBytes, } from 'firebase/storage';
 
 import { createUserWithEmailAndPassword, getAuth } from 'firebase/auth';
 
@@ -233,11 +233,30 @@ class Storage {
     if (!file) {
       throw new Error('File lỗi');
     }
-    const { ref: f } = await uploadBytes(ref(this.storage, reference), file);
+
+    // Xác định loại nội dung dựa trên phần mở rộng của tên tệp tin
+    let contentType: string;
+    const fileName = file.name.toLowerCase();
+    if (fileName.endsWith('.jpg') || fileName.endsWith('.jpeg')) {
+      contentType = 'image/jpeg';
+    } else if (fileName.endsWith('.png')) {
+      contentType = 'image/png';
+    } else {
+      throw new Error('Loại tệp tin không được hỗ trợ');
+    }
+
+    // Thiết lập metadata với contentType phù hợp
+    const metadata: UploadMetadata = {
+      contentType: contentType
+    };
+
+    // Tải tệp lên với metadata đã thiết lập
+    const { ref: f } = await uploadBytes(ref(this.storage, reference), file, metadata);
 
     return getDownloadURL(f);
   }
 }
+
 
 export const storage = new Storage();
 

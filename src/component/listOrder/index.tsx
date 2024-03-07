@@ -171,7 +171,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                     <div key={key} className='flex justify-between w-full my-2 px-5'>
                         <div className='flex'>
                             <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
-                                <img src={item.url ? item.url : fakeImg} alt="unloaded" className='w-24' />
+                                <img src={item.urls && item.urls.length > 0 ? item.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                             </div>
                             <div className='overflow-hidden'>
                                 <div className='font-Fredoka font-semibold text-[22px]'>{item.name ? item.name : 'null'}</div>
@@ -180,7 +180,8 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                                     {item.include && item.include.map((itemInclude: any, key: number) => {
                                         return (
                                             <div key={key} className="flex items-center">
-                                                <img className="w-5 rounded-md mr-1" src={itemInclude.url ? itemInclude.url : fakeImg} alt="" />
+                                                <img className="w-5 rounded-md mr-1"
+                                                    src={itemInclude.urls && itemInclude.urls.length > 0 ? itemInclude.urls[0] : fakeImg} alt="" />
                                                 {itemInclude.name ? itemInclude.name + '-' : 'null-'}
                                                 {itemInclude.prices ? formatPrices(itemInclude.prices) + 'VND' : 'null'}
                                             </div>
@@ -229,8 +230,8 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                     text={billInprocessData && billInprocessData !== null ? 'Gọi Thêm' : "Gọi Luôn"}
                     icPosition='right'
                     // bgIcon='#EA5958'
-                    icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" class="w-6 h-6">
+                            <path strokeLinecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         `}
                     onclick={() => {
@@ -256,7 +257,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                             <div className='flex w-full justify-between mt-4' key={key}>
                                 <div className='flex'>
                                     <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
-                                        <img src={itemBillInprocess.url ? itemBillInprocess.url : fakeImg} alt="unloaded" className='w-24' />
+                                        <img src={itemBillInprocess.urls &&itemBillInprocess.urls.length > 0 ? itemBillInprocess.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                                     </div>
                                     <div className='overflow-hidden'>
                                         <div className='font-Fredoka font-semibold text-[22px]'>{itemBillInprocess.name ? itemBillInprocess.name : 'null'}</div>
@@ -265,7 +266,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                                             {itemBillInprocess.include && itemBillInprocess.include.map((itemInclude: any, key: number) => {
                                                 return (
                                                     <div key={key} className="flex items-center">
-                                                        <img className="w-5 rounded-md mr-1" src={itemInclude.url ? itemInclude.url : fakeImg} alt="" />
+                                                        <img className="w-5 rounded-md mr-1" src={itemInclude.urls && itemInclude.urls.length > 0 ? itemInclude.urls[0] : fakeImg} alt="" />
                                                         {itemInclude.name ? itemInclude.name + '-' : 'null-'}
                                                         {itemInclude.prices ? formatPrices(itemInclude.prices) + 'VND' : 'null'}
                                                     </div>

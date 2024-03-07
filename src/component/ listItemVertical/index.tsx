@@ -9,7 +9,7 @@ interface ItemListVerticalProps {
         id: string;
         name: string;
         prices: string;
-        url: string;
+        url: string[];
         desc: string;
     }[]
 }
@@ -21,13 +21,22 @@ const ItemListVertical: React.FC<ItemListVerticalProps> = ({ data, loading }) =>
                 ? data.map((item: any, key: number) => {
                     return (
                         <div className="flex bg-[#FFFFFF] mb-[2px] px-2 py-3 items-center shadow-lg w-[100%] md:w-[90%] lg:w-[80%] md:rounded-lg md:my-2" key={key}>
-                            <img src={item.url ? item.url : fakeImg} alt="" className="w-[7rem] h-[7rem] rounded-lg " />
+                            <div className="snap-x snap-mandatory w-[7rem] h-[7rem] rounded-lg overflow-hidden">
+                                {/* {item.urls && item.urls.length > 0 &&
+                                    item.urls.map((itemUrl: string) =>
+                                        <div className="snap-always snap-center">
+                                            <img src={itemUrl ? itemUrl : fakeImg} alt="" className="w-[7rem] h-[7rem]" />
+                                        </div>
+                                    )} */}
+                                <img src={item.urls[0] ? item.urls[0] : fakeImg} alt="" className="h-[7rem]" />
+
+                            </div>
                             <div className="pl-3 w-full">
                                 <div className="font-Fredoka font-semibold text-[22px]">{item.name ? item.name : ''}</div>
                                 <div className="w-full font-Fredoka font-normal text-[15px] text-[#A9A9A9] text-wrap hover:text-black">{limitWords(item.desc ? item.desc : `Bao Gom: Thi bo 3 chi, Thit bo My, Thit Lon 3 Chi, Sot Trung muoi, Rau, Banh Mi, Kim Chi, Nam Kim Cham`, 18)}</div>
                                 <div className="font-Fredoka w-full flex justify-between pt-3">
                                     <div>{item.prices ? formatPrices(item.prices) : '??'} vnd</div>
-                                    <Button text="+" onclick={()=>AddToOrder(item)}></Button>
+                                    <Button text="+" onclick={() => AddToOrder(item)}></Button>
                                 </div>
                             </div>
                         </div>

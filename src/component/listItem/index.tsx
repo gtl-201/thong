@@ -44,7 +44,7 @@ const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
                         return (
                             <div key={key} onClick={() => AddToOrder(item)} className='cursor-pointer flex-wrap shadow-sm bg-[#FDE9DE] my-10 lg:mx-14 mx-10 w-[13rem] rounded-[2rem] relative'>
                                 <div className='shadow-lg w-[12.5rem] h-[12.5rem] overflow-hidden rounded-full border-[12px] border-[#E95758] absolute ml-[3.5rem] -mt-[3.5rem]'>
-                                    <img src={item.url ? item.url : imgtmp} alt="" className='min-h-[12.5rem] min-w-[12.5rem] shadow-inner' />
+                                    <img src={item.url && item.url[0] ? item.url[0] : imgtmp} alt="" className='min-h-[12.5rem] min-w-[12.5rem] shadow-inner' />
                                 </div>
                                 <div className='mt-3 ml-3'>
                                     <Button text='+'></Button>

@@ -47,7 +47,7 @@ export default function DetailFood() {
                     <div className="flex flex-col items-end ">
                         <div className="font-Fredoka font-bold text-[30px] capitalize ">{data && data.prices ? formatPrices(data.prices) : ''}</div>
                         <Button
-                            icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="white" class="w-12 h-12">
+                            icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="white" class="w-12 h-12">
                             <path d="M12 4.5v15m7.5-7.5h-15" />
                           </svg>
                             `}
