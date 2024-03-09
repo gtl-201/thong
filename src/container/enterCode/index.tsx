@@ -2,17 +2,35 @@
 import Header from "../../component/header";
 import { useState } from "react";
 import Button from "../../component/button";
+import { firestore } from "../../firebase";
+import { notifications } from "../../utils";
 
 
 export default function EnterCode() {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    interface DataItem {
+        active: boolean;
+        id: string;
+    }
     const [code, setCode] = useState('')
     const handleCheckCode = () => {
         if (code !== '') {
+            firestore.get('adminCode').then(data => {
+                if (data.some((item: DataItem) => item.id === localStorage.getItem('code'))) {
+                    notifications('success','Code dung','da mo full quyen')
+                }else{
+                    notifications('warning','Code sai','Hay thu nhap lai')
+                    
+                }
+            }).catch(error => {
+                console.error('Error fetching data:', error);
+                notifications('warning', error)
+            });
+            
             localStorage.setItem('code', code)
         } else {
-            console.log('code blank');
+            notifications('warning', 'Code trong, nhap lai')
         }
     }
 
