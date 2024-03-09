@@ -13,15 +13,15 @@ interface ListOrderProps {
             name: string;
             id: string;
             prices: string;
-            url: string;
+            urls: string;
         }[];
-        url: string;
+        urls: string;
         prices: string
     } | {
         id: string;
         name: string;
         prices: string;
-        url: string;
+        urls: string;
         desc: string;
     }[];
 }
@@ -123,10 +123,10 @@ const ListOrder: React.FC<ListOrderProps> = () => {
             name: string;
             id: string;
             prices: string;
-            url: string;
+            urls: string;
         }[];
         desc?: string;
-        url: string;
+        urls: string;
         prices: string;
     }[]
     ) => {

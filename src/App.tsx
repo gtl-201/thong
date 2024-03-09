@@ -8,6 +8,7 @@ import CardButton from './component/cartButton';
 import EnterCode from './container/enterCode';
 import { firestore } from './firebase';
 import { useEffect, useState } from 'react';
+import AddFood from './container/addFood';
 
 export default function App() {
   interface DataItem {
@@ -37,7 +38,8 @@ export default function App() {
         <Route path="/detailFood" Component={DetailFood} />
         <Route path="/order" Component={Order} />
         <Route path="/enterCodeAccess" Component={EnterCode} />
-        {fullAccess && <></>}
+        
+        {fullAccess && <Route path="/addFood" Component={AddFood} />}
 
 
       </Routes>

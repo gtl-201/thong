@@ -1,8 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Button from "../button";
 import { limitText, notifications } from "../../utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { firestore, storage } from "../../firebase";
+import SelectMultiple from "./selectMultiple";
+import loadingGif from '../../assets/loading/main.gif'
+
 interface AddFormProps {
     loading?: boolean;
     data?: {
@@ -20,45 +23,113 @@ const AddForm: React.FC<AddFormProps> = () => {
     const [desc, setDesc] = useState('')
     const [selectedFiles, setSelectedFiles] = useState<any[]>([]);
     const [selectedType, setSelectedType] = useState<string>('meat');
+    const [loading, setLoading] = useState(false)
+
+    // {SATRT Search Food For Combo}
+    const [dataFoods, setdataFoods] = useState<any[] | null>(null);
+    useEffect(() => {
+        firestore.getMultiCollection(['meat', 'drink', 'sideDishes']).then(data => {
+            const mergedArray = Object.entries(data).reduce((accumulator, [key, value]) => {
+                console.log(key);
+                return accumulator.concat(value.map((item: any) => ({
+                    id: item.id,
+                    name: item.name,
+                    prices: item.prices,
+                    urls: item.urls
+                })));
+            }, []);
+            setdataFoods(mergedArray)
+
+
+        }).catch(error => {
+            console.error('Error fetching data:', error);
+            const tmp: [] = [];
+            setdataFoods(tmp)
+        });
+    }, [])
+    const [selectedValues, setSelectedValues] = useState<string[]>([])
+    // {END Search Food For Combo}
+
 
     const handleCreateFood = () => {
-        console.log(name, price, desc, selectedFiles, selectedType);
-
-        const type = 'photos';
-        console.log(selectedFiles);
-        const uploadTasks = selectedFiles.map((uploadFile) => {
-            return storage.upload(`${type}/${new Date().getTime()}-${uploadFile.name}`, uploadFile);
-        });
-
-        Promise.all(uploadTasks)
-            .then((fileSrcs) => {
-                const urls = fileSrcs.map(fileSrc => fileSrc);
-                const dataFood = {
-                    name: name,
-                    prices: price,
-                    desc: desc,
-                    urls: urls
-                };
-
-                firestore.add(selectedType, dataFood).then(dataSetFood => {
-                    console.log('added bill', dataSetFood);
-                    setName('')
-                    setPrice('')
-                    setDesc('')
-                    setSelectedFiles([])
-                    setSelectedType('meat')
-                    notifications('success', 'Them thanh cong')
-                }).catch(error => {
-                    console.error('Error add data:', error);
-                    notifications('warning', 'Them that bai' + error)
-                });
-            })
-            .catch(error => {
-                console.error('Error uploading files:', error);
-                notifications('warning', 'Them that bai' + error)
+        // console.log(name, price, desc, selectedFiles, selectedType);
+        if (name != '' && price != '' && selectedFiles.length > 0 && selectedType != '') {
+            setLoading(true)
+            const type = 'photos';
+            const uploadTasks = selectedFiles.map((uploadFile) => {
+                return storage.upload(`${type}/${new Date().getTime()}-${uploadFile.name}`, uploadFile);
             });
-    }
 
+            Promise.all(uploadTasks)
+                .then((fileSrcs) => {
+                    const urls = fileSrcs.map(fileSrc => fileSrc);
+
+                    if (desc !== '' && selectedType != 'combo') {
+                        const dataFood = {
+                            name: name,
+                            prices: price,
+                            desc: desc,
+                            urls: urls
+                        };
+                        firestore.add(selectedType, dataFood).then(dataSetFood => {
+                            console.log('added food', dataSetFood);
+                            setName('')
+                            setPrice('')
+                            setDesc('')
+                            setSelectedFiles([])
+                            setSelectedType('meat')
+                            notifications('success', 'Them thanh cong')
+                            setLoading(false)
+                        }).catch(error => {
+                            console.error('Error add data:', error);
+                            notifications('warning', 'Them that bai', error)
+                            setLoading(false)
+
+                        });
+                    } else if (selectedType === 'combo') {
+                        const include: object[] = []
+                        selectedValues?.forEach((selectedId: string) => {
+                            const foundItem = dataFoods?.find(foodItem => foodItem.id === selectedId);
+                            if (foundItem) {
+                                include.push(foundItem);
+                            }
+                        });
+                        const dataCombo = {
+                            name: name,
+                            prices: price,
+                            include: include,
+                            urls: urls,
+                        }
+                        firestore.add(selectedType, dataCombo).then(dataSetCombo => {
+                            console.log('added food', dataSetCombo);
+                            setName('')
+                            setPrice('')
+                            setSelectedValues([])
+                            setSelectedFiles([])
+                            setSelectedType('meat')
+                            notifications('success', 'Them combo thanh cong')
+                            setLoading(false)
+
+                        }).catch(error => {
+                            console.error('Error add data:', error);
+                            notifications('warning', 'Them that bai', error)
+                            setLoading(false)
+                        });
+                    } else {
+                        notifications('warning', 'Them that bai', 'Khong duoc bo trong o nao')
+                        setLoading(false)
+                    }
+                })
+                .catch((error: any) => {
+                    console.error('Error uploading files:', error);
+                    notifications('warning', 'Them that bai', error)
+                    setLoading(false)
+                });
+        } else {
+            notifications('warning', 'Them that bai', 'Khong duoc bo trong o nao')
+            setLoading(false)
+        }
+    }
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const files = Array.from(e.target.files);
@@ -82,21 +153,28 @@ const AddForm: React.FC<AddFormProps> = () => {
             setSelectedFiles(prevFiles => [...prevFiles, ...uniqueFiles]);
         }
     };
-
     const removeImage = (name: string) => {
         setSelectedFiles(prevFiles => prevFiles.filter((item) => item.name !== name));
     };
 
     return (
         <div className="w-full bg-[#F5F5F5] flex flex-col items-center mb-10">
+            {loading && <div className="absolute z-50 flex justify-center bg-[#e8dfdd76] w-full">
+                <img src={loadingGif} alt="" className="opacity-50 w-full" />
+            </div>}
             <div className="w-full md:w-[50rem] lg:w-[60rem] px-5">
+                <div className="font-Fredoka font-semibold text-[27px] mt-3 text-center uppercase">Them Mon</div>
                 <div className="sm:col-span-3">
                     <label htmlFor="country" className="block text-sm  mt-5 mb-1 font-Fredoka font-semibold text-[27px] leading-6 text-gray-900">Phân loại</label>
                     <div className="mt-2">
-                        <select id="country" name="country" autoComplete="country-name" className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                        <select
+                            id="country"
+                            name="country"
+                            className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={(e) => setSelectedType(e.target.value)}
+                            value={selectedType}
                         >
-                            <option value={'meat'}>Thịt</option>
+                            <option value={'meat'} defaultChecked>Thịt</option>
                             <option value={'drink'}>Đồ uống</option>
                             <option value={'sideDishes'}>Ăn kèm</option>
                             <option value={'combo'}>COMBO</option>
@@ -128,17 +206,25 @@ const AddForm: React.FC<AddFormProps> = () => {
                     }}
                 />
 
-                <label htmlFor="Desc" className="block text-sm  mt-5 mb-1 font-Fredoka font-semibold text-[27px] leading-6 text-gray-900">Mô tả</label>
-                <input
-                    type="text"
-                    name="Desc"
-                    id="Desc"
-                    className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    value={desc}
-                    onChange={(e) => {
-                        setDesc(e.target.value);
-                    }}
-                />
+                {selectedType === 'combo'
+                    ? <SelectMultiple
+                        dataFoods={dataFoods ? dataFoods : []}
+                        onSelectedValuesChange={(selectedValues) => setSelectedValues(selectedValues)}
+                    />
+                    : <div>
+                        <label htmlFor="Desc" className="block text-sm  mt-5 mb-1 font-Fredoka font-semibold text-[27px] leading-6 text-gray-900">Mô tả</label>
+                        <input
+                            type="text"
+                            name="Desc"
+                            id="Desc"
+                            className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                            value={desc}
+                            onChange={(e) => {
+                                setDesc(e.target.value);
+                            }}
+                        />
+                    </div>}
+
                 {selectedFiles.length > 0 ? (
                     <div>
                         <h2 className="font-Fredoka font-semibold text-[20px] mt-5">Hình ảnh đã chọn {'(' + selectedFiles.length + ')'}:
@@ -181,7 +267,6 @@ const AddForm: React.FC<AddFormProps> = () => {
                 ) : (
                     <div className="col-span-full">
                         <label htmlFor="Desc" className="block text-sm  mt-5 mb-1 font-Fredoka font-semibold text-[27px] leading-6 text-gray-900">Hình ảnh</label>
-                        {/* <label htmlFor="cover-photo" className="block text-sm font-medium leading-6 text-gray-900">Cover photo</label> */}
                         <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                             <div className="text-center">
                                 <svg className="mx-auto h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -210,11 +295,14 @@ const AddForm: React.FC<AddFormProps> = () => {
                     </div>
                 )}
                 <div className="flex justify-end mt-5">
-                    <Button text="TẠO MÓN LUÔN" icPosition="right" icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6">
+                    <Button
+                        text="TẠO MÓN LUÔN"
+                        icPosition="right" icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6">
                     <path strokeLinecap="round" stroke-linejoin="round" d="m5.25 4.5 7.5 7.5-7.5 7.5m6-15 7.5 7.5-7.5 7.5" />
                     </svg>
                     `}
                         onclick={() => handleCreateFood()}
+
                     />
                 </div>
             </div>

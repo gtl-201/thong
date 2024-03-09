@@ -2,7 +2,6 @@
 import Header from "../../component/header";
 import { useState } from "react";
 import Button from "../../component/button";
-import AddForm from "../../component/addForm";
 
 
 export default function EnterCode() {
@@ -41,8 +40,6 @@ export default function EnterCode() {
                         onclick={() => handleCheckCode()} />
                 </div>
             </div>
-
-            <AddForm></AddForm>
         </div>
     )
 }
