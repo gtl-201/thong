@@ -9,6 +9,7 @@ import EnterCode from './container/enterCode';
 import { firestore } from './firebase';
 import { useEffect, useState } from 'react';
 import AddFood from './container/addFood';
+import AllOrder from './container/allOrder';
 
 export default function App() {
   interface DataItem {
@@ -24,7 +25,7 @@ export default function App() {
     }).catch(error => {
       console.error('Error fetching data:', error);
     });
-  }, []) 
+  }, [])
 
 
   return (
@@ -38,8 +39,13 @@ export default function App() {
         <Route path="/detailFood" Component={DetailFood} />
         <Route path="/order" Component={Order} />
         <Route path="/enterCodeAccess" Component={EnterCode} />
-        
-        {fullAccess && <Route path="/addFood" Component={AddFood} />}
+
+        {fullAccess && (
+          <>
+            <Route path="/addFood" Component={AddFood} />
+            <Route path="/managerOrder" Component={AllOrder} />
+          </>
+        )}
 
 
       </Routes>

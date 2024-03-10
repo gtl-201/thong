@@ -26,9 +26,9 @@ const Button: React.FC<ButtonProps> = ({ text, icon, bg, textSize, bgIcon, icPos
             ? <div className='px-2 text-sm'>{text ?? ''}</div>
             : textSize == 'md'
               ? <div className='px-2 text-md'>{text ?? ''}</div>
-              : textSize == 'md'
+              : textSize == 'lg'
                 ? <div className='px-2 text-lg'>{text ?? ''}</div>
-                : <div className={textSize}>{text ?? ''}</div>
+                : <div className={'px-2 py-1 text-[' + textSize + ']'}>{text ?? ''}</div>
           : <div className='px-2'>{text ?? ''}</div>
         : null
       }

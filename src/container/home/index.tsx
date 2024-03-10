@@ -66,6 +66,9 @@ export default function Home() {
             <Link to='/addFood' className="my-2 w-full flex justify-end" aria-current="page">
                 <Button text="add Foods"></Button>
             </Link>
+            <Link to='/managerOrder' className="my-2 w-full flex justify-end" aria-current="page">
+                <Button text="manage order"></Button>
+            </Link>
         </div>
     )
 }

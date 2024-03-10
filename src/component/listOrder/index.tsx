@@ -60,7 +60,6 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                 data2.listDishes.push(item1);
             }
         });
-        console.log(data2, 'biiiiiii');
         const idBill = localStorage.getItem('idBill') || '';
         firestore.update('bill', idBill, data2).then(() => {
             removeAllItem()
@@ -68,7 +67,6 @@ const ListOrder: React.FC<ListOrderProps> = () => {
         }).catch(error => {
             console.log(error);
         })
-
         return data2;
     };
 
@@ -140,8 +138,8 @@ const ListOrder: React.FC<ListOrderProps> = () => {
             timeOut: null
         };
 
-        console.log(newDataBill);
-
+        // console.log(newDataBill);
+        
         firestore.add('bill', newDataBill).then(billData_1 => {
             localStorage.removeItem('dataOrder')
             setData(null)

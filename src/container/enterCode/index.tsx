@@ -17,20 +17,23 @@ export default function EnterCode() {
     const handleCheckCode = () => {
         if (code !== '') {
             firestore.get('adminCode').then(data => {
-                if (data.some((item: DataItem) => item.id === localStorage.getItem('code'))) {
-                    notifications('success','Code dung','da mo full quyen')
-                }else{
-                    notifications('warning','Code sai','Hay thu nhap lai')
-                    
+                if (data.some((item: DataItem) => item.id === code)) {
+                    notifications('success', 'Code dung', 'da mo full quyen')
+                    setCode('')
+                } else {
+                    notifications('warning', 'Code sai', 'Hay thu nhap lai')
+                    setCode('')
                 }
             }).catch(error => {
                 console.error('Error fetching data:', error);
                 notifications('warning', error)
+                setCode('')
             });
-            
+
             localStorage.setItem('code', code)
         } else {
             notifications('warning', 'Code trong, nhap lai')
+            setCode('')
         }
     }
 
@@ -41,7 +44,7 @@ export default function EnterCode() {
                 <label htmlFor="AdminCode" className="block text-sm text-center mt-5 mb-3 font-Fredoka font-semibold text-[28px] leading-6 text-gray-900">Nhap Admin Code</label>
 
                 <input
-                    type="text"
+                    type="password"
                     name="AdminCode"
                     id="AdminCode"
                     className="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

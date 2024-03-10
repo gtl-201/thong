@@ -165,11 +165,11 @@ const AddForm: React.FC<AddFormProps> = () => {
             <div className="w-full md:w-[50rem] lg:w-[60rem] px-5">
                 <div className="font-Fredoka font-semibold text-[27px] mt-3 text-center uppercase">Them Mon</div>
                 <div className="sm:col-span-3">
-                    <label htmlFor="country" className="block text-sm  mt-5 mb-1 font-Fredoka font-semibold text-[27px] leading-6 text-gray-900">Phân loại</label>
+                    <label htmlFor="selectType" className="block text-sm  mt-5 mb-1 font-Fredoka font-semibold text-[27px] leading-6 text-gray-900">Phân loại</label>
                     <div className="mt-2">
                         <select
-                            id="country"
-                            name="country"
+                            id="selectType"
+                            name="selectType"
                             className="px-3 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
                             onChange={(e) => setSelectedType(e.target.value)}
                             value={selectedType}

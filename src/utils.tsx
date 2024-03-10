@@ -201,3 +201,27 @@ export const notifications = (type: 'success' | 'danger' | 'warning', title: str
     // Thực hiện loại bỏ sau 5 giây
     timeout = setTimeout(removeNotifyContainer, 2000);
 }
+
+export const formatDateByTimeStamp = (timestamp: any, fulldate?: boolean) => {
+    const timeStampMilliseconds = timestamp * 1000; // Chuyển đổi giây thành miligiây
+    const date = new Date(timeStampMilliseconds); // Tạo đối tượng Date từ giá trị miligiây
+
+    // Lấy thông tin ngày, tháng, năm và giờ, phút, giây
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const seconds = date.getSeconds();
+
+    // Định dạng ngày và giờ
+    // 
+    if (fulldate) {
+        const formattedDateTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
+        return formattedDateTime;
+    } else {
+        const formattedDateTime = `${hours}:${minutes}:${seconds}`;
+        return formattedDateTime;
+    }
+    
+};
