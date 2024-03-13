@@ -4,6 +4,7 @@ import Button from '../button';
 import { formatPrices, formatDateByTimeStamp } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
 import { firestore } from '../../firebase';
+import { Link } from 'react-router-dom';
 
 interface ManagerOrderProps {
     data?: {
@@ -33,9 +34,6 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
     useEffect(() => {
         getBillInprocess()
     }, [])
-
-
-
     const getBillInprocess = (sortField?: string) => {
         firestore.get('bill').then(billData_1 => {
             const sort = (unPayBill: any) => {
@@ -45,7 +43,7 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                     return timeB - timeA;
                 });
                 // console.log(JSON.stringify(unPayBill));
-                console.log(unPayBill);
+                // console.log(unPayBill);
                 setBillData(unPayBill)
             }
             if (sortField === 'all') {
@@ -191,12 +189,26 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
         });
     }
 
+    const removeBill = (idBill: string) => {
+        firestore.delete('bill', idBill).then(() => {
+            setBillData(prevBillData => prevBillData.filter(bill => bill.id !== idBill));
+            console.log("Bill removed from dataBill");
+        }
+        ).catch(error => {
+            console.error('Error fetching data:', error);
+        });
+    }
+
+    const addMoreFood = (idBill: string) => {
+        localStorage.setItem('idBill', idBill)
+    }
+
 
 
     return (
         <div className="flex flex-wrap w-[100%] md:w-[95%] lg:w-[60rem] justify-center">
             {/* Các Món Đã Gọi */}
-            <div className='w-full flex justify-start mb-2'>
+            <div className='w-full flex justify-start mb-2 ml-4'>
                 <div className='font-Fredoka font-semibold text-[20px] uppercase mr-2 w-16'>Status</div>
                 <select
                     id="sort"
@@ -225,12 +237,20 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
             </div> */}
             {Object.entries(groupBillsByDay(billData)).map(([day, billsInDay], index: number) => (
                 <div key={index} className='px-5 w-full mb-6 shadow-xl border-t-2 bg-[#FFFEFA] rounded-lg py-5'>
-                    <div className='font-Fredoka font-semibold text-[30px] w-full uppercase'>
+                    <div className='font-Fredoka font-semibold text-[30px] w-full uppercase flex justify-between items-center'>
                         {`Ngày ${day}`}
                     </div>
                     {/* Hiển thị các bill trong nhóm */}
                     {billsInDay.map((item: any) => (
-                        <div className='px-5 w-full py-5 mb-4 border-2 rounded-lg'>
+                        <div className='px-5 w-full py-5 mb-4 border-2 rounded-lg relative'>
+                            <div
+                                onClick={() => {
+                                    removeBill(item.id)
+                                    // console.log(billsInDay);
+
+                                }}
+                                className='absolute bg-red-500 px-2 rounded-lg text-white py-1 top-2 right-2 cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
+                            >Xoá hđ</div>
                             <div className='font-Fredoka font-semibold text-[21px] w-full uppercase text-gray-500 flex justify-start items-center'>
                                 <div className='w-4 h-4 bg-yellow-400 rounded-full mr-2'></div>
                                 Table {item.table + ' - Join: ' + formatDateByTimeStamp(item.timeJoin.seconds)}
@@ -241,7 +261,7 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                                 return (
                                     <div className='flex w-full justify-between mt-4' key={key}>
                                         <div className='flex'>
-                                            <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
+                                            <div className='w-24 h-24 max-h-44 overflow-hidden bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
                                                 <img src={itemBillInprocess.urls && itemBillInprocess.urls.length > 0 ? itemBillInprocess.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                                             </div>
                                             <div
@@ -294,10 +314,12 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                                         <div className='text-red-500 ml-1'>VND</div>
                                     </div>
                                 </div>
-                                {item.status !== 'pay' && <div>
+                                {item.status !== 'pay' && <div className='flex flex-col items-end'>
+                                    <Link to='/allMenu' className='mb-2'>
+                                        <Button onclick={() => addMoreFood(item.id)} text='Thêm món' textSize='20px' bg='#3CA0F5'></Button>
+                                    </Link>
                                     <Button onclick={() => updateStatusBill(item.id, 'bill')} text='Thanh toán' textSize='20px' bg='#41A146'></Button>
                                 </div>}
-
                             </div>
                             {/* <div className='tborder-t-2 mt-5'></div> */}
                             {/* <div className='text-center font-Fredoka font-bold text-[20px] mt-2 mb-7 bg-transparent'>END</div> */}

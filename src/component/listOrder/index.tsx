@@ -4,6 +4,7 @@ import Button from '../button';
 import { formatPrices, removeAllOrder, removeItemOrder } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
 import { firestore } from '../../firebase';
+import { event } from '../../EventEmitter';
 
 interface ListOrderProps {
     data?: {
@@ -139,7 +140,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
         };
 
         // console.log(newDataBill);
-        
+
         firestore.add('bill', newDataBill).then(billData_1 => {
             localStorage.removeItem('dataOrder')
             setData(null)
@@ -168,7 +169,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                 return (
                     <div key={key} className='flex justify-between w-full my-2 px-5'>
                         <div className='flex'>
-                            <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
+                            <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center max-h-44 overflow-hidden'>
                                 <img src={item.urls && item.urls.length > 0 ? item.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                             </div>
                             <div className='overflow-hidden'>
@@ -254,8 +255,8 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                         return (
                             <div className='flex w-full justify-between mt-4' key={key}>
                                 <div className='flex'>
-                                    <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
-                                        <img src={itemBillInprocess.urls &&itemBillInprocess.urls.length > 0 ? itemBillInprocess.urls[0] : fakeImg} alt="unloaded" className='w-24' />
+                                    <div className='w-24 h-24 max-h-44 overflow-hidden bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
+                                        <img src={itemBillInprocess.urls && itemBillInprocess.urls.length > 0 ? itemBillInprocess.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                                     </div>
                                     <div className='overflow-hidden'>
                                         <div className='font-Fredoka font-semibold text-[22px]'>{itemBillInprocess.name ? itemBillInprocess.name : 'null'}</div>
