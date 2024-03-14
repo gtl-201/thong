@@ -4,7 +4,6 @@ import Button from '../button';
 import { formatPrices, removeAllOrder, removeItemOrder } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
 import { firestore } from '../../firebase';
-import { event } from '../../EventEmitter';
 
 interface ListOrderProps {
     data?: {

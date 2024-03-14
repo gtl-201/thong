@@ -35,7 +35,6 @@ interface ItemListProps {
 }
 
 const ItemList: React.FC<ItemListProps> = ({ data, loading }) => {
-
     return (
         <div className='flex justify-center'>
             <div className="flex mt-[2rem] w-full overflow-x-scroll mb-20 pt-10 snap-x">

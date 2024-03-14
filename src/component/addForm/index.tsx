@@ -35,6 +35,7 @@ const AddForm: React.FC<AddFormProps> = () => {
                     id: item.id,
                     name: item.name,
                     prices: item.prices,
+                    desc: item.desc,
                     urls: item.urls
                 })));
             }, []);
@@ -100,6 +101,7 @@ const AddForm: React.FC<AddFormProps> = () => {
                             include: include,
                             urls: urls,
                         }
+                        console.log(dataCombo);
                         firestore.add(selectedType, dataCombo).then(dataSetCombo => {
                             console.log('added food', dataSetCombo);
                             setName('')
