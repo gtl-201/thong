@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import Button from "../../component/button";
-import Header from "../../component/header";
 import ListItem from "../../component/listItem";
 import { firestore } from "../../firebase";
 import { Link } from "react-router-dom";
@@ -39,7 +38,6 @@ export default function Home() {
 
     return (
         <div className="w-full bg-[#FBFBFB]">
-            <Header headerOnly={true}></Header>
             <div className="mx-[30px] flex flex-col items-center">
                 <div className="font-Fredoka font-semibold text-[45px] ">
                     Top <span className="text-[#E44F4F]">Combo</span> hot

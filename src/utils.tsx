@@ -105,7 +105,6 @@ export const removeAllOrder = (storageKey: string) => {
     // notifications('danger', 'Đã xoá tất cả món')
 }
 
-
 export const removeItemOrder = (id: string, name: string, storageKey: string) => {
     // Lấy dữ liệu từ localStorage
     const data = localStorage.getItem(storageKey);

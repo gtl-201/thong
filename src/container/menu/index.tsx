@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Header from "../../component/header";
 import ListItem from "../../component/ listItemVertical";
 import { firestore } from "../../firebase";
 import { useEffect, useState } from "react";
@@ -21,15 +20,6 @@ export default function Menu() {
         });
 
     }, [])
-    useEffect(() => {
-        console.log(data, 'full dt');
-        console.log(data && data[collection], 'dt collection');
-
-
-
-    }, [collection])
-
-
 
     const [searchKeyword, setSearchKeyword] = useState("");
     const [dataOnSearch, setDataOnSearch] = useState<any[]>([]);
@@ -55,11 +45,8 @@ export default function Menu() {
         // return results;
     }
 
-
-
     return (
         <div className="w-full bg-[#F5F5F5] flex flex-col items-center">
-            <Header headerOnly={false}></Header>
             <div className="font-Fredoka font-semibold text-[30px] text-center">
                 Chuc <span className="text-[#E44F4F]">quy khach</span> ngon mieng
             </div>
@@ -87,17 +74,17 @@ export default function Menu() {
 
                     <div onClick={() => setCollection('meat')}
                         style={{ color: collection == 'meat' ? 'black' : '#7A787A' }}
-                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac loai Thit</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Thịt</div>
                     <div className="border-r-2 w-0" />
 
                     <div onClick={() => setCollection('sideDishes')}
                         style={{ color: collection == 'sideDishes' ? 'black' : '#7A787A' }}
-                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Do an kem</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Đồ ăn kèm</div>
                     <div className="border-r-2 w-0" />
 
                     <div onClick={() => setCollection('drink')}
                         style={{ color: collection == 'drink' ? 'black' : '#7A787A' }}
-                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Cac Loai Nuoc</div>
+                        className="cursor-pointer hover:text-black text-center text-[#7A787A] mx-1 px-1 md:px-2" aria-current="page">Nước</div>
                 </div>
             }
 

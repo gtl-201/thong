@@ -10,6 +10,8 @@ import { firestore } from './firebase';
 import { useEffect, useState } from 'react';
 import AddFood from './container/addFood';
 import AllOrder from './container/allOrder';
+import Header from './component/header';
+import Footer from './component/footer';
 
 export default function App() {
   interface DataItem {
@@ -27,29 +29,31 @@ export default function App() {
     });
   }, [])
 
-
   return (
-    <Router>
-      <Link to='/order'>
-        <CardButton />
-      </Link>
-      <Routes >
-        <Route path="/" Component={Home} />
-        <Route path="/allMenu" Component={Menu} />
-        <Route path="/detailFood" Component={DetailFood} />
-        <Route path="/order" Component={Order} />
-        <Route path="/enterCodeAccess" Component={EnterCode} />
-
-        {fullAccess && (
-          <>
-            <Route path="/addFood" Component={AddFood} />
-            <Route path="/managerOrder" Component={AllOrder} />
-          </>
-        )}
-
-
-      </Routes>
-      <div id='notifyContainer' className='fixed top-10 right-2'></div>
-    </Router>
+    <div className='min-h-full h-screen flex flex-col justify-between bg-[#F5F5F5]'>
+      <div>
+        <Router>
+          <Header />
+          <Routes >
+            <Route path="/" Component={Home} />
+            <Route path="/allMenu" Component={Menu} />
+            <Route path="/detailFood" Component={DetailFood} />
+            <Route path="/order" Component={Order} />
+            <Route path="/enterCodeAccess" Component={EnterCode} />
+            {fullAccess && (
+              <>
+                <Route path="/addFood" Component={AddFood} />
+                <Route path="/managerOrder" Component={AllOrder} />
+              </>
+            )}
+          </Routes>
+          <Link to='/order'>
+            <CardButton />
+          </Link>
+          <div id='notifyContainer' className='fixed top-10 right-2'></div>
+        </Router>
+      </div>
+      <Footer />
+    </div>
   )
 }

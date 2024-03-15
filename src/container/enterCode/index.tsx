@@ -1,13 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Header from "../../component/header";
 import { useState } from "react";
 import Button from "../../component/button";
 import { firestore } from "../../firebase";
 import { notifications } from "../../utils";
 
-
 export default function EnterCode() {
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface DataItem {
         active: boolean;
@@ -39,7 +36,6 @@ export default function EnterCode() {
 
     return (
         <div className="w-full bg-[#F5F5F5] flex flex-col items-center">
-            <Header headerOnly={false}></Header>
             <div className="col-span-full w-full md:w-[50rem] lg:w-[60rem] px-5">
                 <label htmlFor="AdminCode" className="block text-sm text-center mt-5 mb-3 font-Fredoka font-semibold text-[28px] leading-6 text-gray-900">Nhap Admin Code</label>
 

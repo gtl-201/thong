@@ -5,13 +5,13 @@ import Hotpot from '../../assets/header/lau.jpg';
 import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderProps {
-    headerOnly?: boolean
 }
 
-const Header: React.FC<HeaderProps> = ({ headerOnly }) => {
+const Header: React.FC<HeaderProps> = () => {
+    const location = useLocation()
     return (
 
-        <div className={headerOnly ? `w-full bg-[#FDF0E9] md:flex pt-5 justify-center rounded-b-3xl pb-6` : `w-full bg-[#FDF0E9] md:flex pt-5 justify-center rounded-b-3xl pb-3`}>
+        <div className={location.pathname ==='/' ? `w-full bg-[#FDF0E9] md:flex pt-5 justify-center rounded-b-3xl pb-6` : `w-full bg-[#FDF0E9] md:flex pt-5 justify-center rounded-b-3xl pb-3`}>
             <div className="sm:w-full md:w-[60rem] px-5">
                 <div className="flex justify-between w-full content-center ">
                     <Link to={'/'} className="content-center flex">
@@ -42,7 +42,7 @@ const Header: React.FC<HeaderProps> = ({ headerOnly }) => {
                             }} />
                     </div>
                 </div>
-                {headerOnly
+                {location.pathname ==='/'
                     ? <div className="columns-2 flex content-center justify-between mt-4">
                         <div className="w-[100%] md:w-[60%] lg:w-[50%] mt-3  self-center">
                             <div className="text-4xl font-bold text-[#EB5659] whitespace-normal">

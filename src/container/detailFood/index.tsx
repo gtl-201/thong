@@ -1,29 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import Header from "../../component/header";
 import loadingGif from '../../assets/loading/main.gif'
 import { AddToOrder, formatPrices } from "../../utils";
 import Button from "../../component/button";
 
 export default function DetailFood() {
-    // const searchParams = new URLSearchParams(location.search);
-    // const dataString = searchParams.get('data');
-    // console.log(dataString);
-
-    // let data: any = null;
-    // try {
-    //     data = JSON.parse(dataString || '');
-
-    // } catch (error) {
-    //     console.error('Error parsing data:', error);
-    // }
     const data: any = JSON.parse(localStorage.getItem('detailFood') || 'null');
-
     return (
         <div className="w-full flex flex-col bg-[#FBFBFB] items-center">
-            <div className="z-10 w-full">
-                <Header headerOnly={false}></Header>
-            </div>
-            <div className="z-0 -mt-5 md:mt-5 w-full md:w-[50rem] lg:w-[60rem] flex flex-col items-center">
+            <div className="z-0 w-full md:mt-5 md:w-[50rem] lg:w-[60rem] flex flex-col items-center">
                 <div className="w-full h-fit overflow-x-scroll overflow-y-hidden max-h-[30rem] rounded-none md:rounded-2xl shadow-lg flex space-x-3 bg-red-200">
                     {data.urls && data.urls.length > 0 ? data.urls.map((item: any) => {
                         return (
