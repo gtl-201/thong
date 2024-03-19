@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import Button from '../button';
-import { formatPrices, removeAllOrder, removeItemOrder } from '../../utils';
+import { formatPrices, notifications, removeAllOrder, removeItemOrder } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
 import { firestore } from '../../firebase';
 
@@ -24,9 +24,11 @@ interface ListOrderProps {
         urls: string;
         desc: string;
     }[];
+    table: string;
+    onCreateOrUpdateBill: (dataTableInProcess: any) => void;
 }
 
-const ListOrder: React.FC<ListOrderProps> = () => {
+const ListOrder: React.FC<ListOrderProps> = ({ table, onCreateOrUpdateBill }) => {
 
     const [data, setData] = useState(localStorage.getItem('dataOrder'))
     const [billInprocessData, setBillInprocessData] = useState<any>()
@@ -34,13 +36,13 @@ const ListOrder: React.FC<ListOrderProps> = () => {
         getBillInprocess()
     }, [])
 
-
     const getBillInprocess = () => {
         const idBill = localStorage.getItem('idBill') || '';
         firestore.getByDoc('bill', idBill).then(billInprocessData_1 => {
             // console.log(billInprocessData_1.status); 
             if (billInprocessData_1.status && billInprocessData_1.status === 'unPay') {
                 setBillInprocessData(billInprocessData_1)
+                onCreateOrUpdateBill(billInprocessData_1.table)
                 return billInprocessData_1
             }
         }).catch(error => {
@@ -68,6 +70,8 @@ const ListOrder: React.FC<ListOrderProps> = () => {
             console.log(error);
         })
         return data2;
+        console.log(data2);
+
     };
 
     const sumAllPrices = (dataSum: any): string => {
@@ -133,7 +137,7 @@ const ListOrder: React.FC<ListOrderProps> = () => {
         const newDataBill = {
             listDishes: dataBill,
             status: 'unPay',
-            table: 2,
+            table: table,
             timeJoin: intervalId,
             timeOut: null
         };
@@ -145,6 +149,10 @@ const ListOrder: React.FC<ListOrderProps> = () => {
             setData(null)
             getBillInprocess()
             console.log('added bill', billData_1);
+            const dataTable = { id: table, enable: false }
+            console.log(dataTable);
+            firestore.update('table', table, dataTable)
+            onCreateOrUpdateBill(table);
         }).catch(error => {
             console.error('Error fetching data:', error);
         });
@@ -224,25 +232,33 @@ const ListOrder: React.FC<ListOrderProps> = () => {
                         {/* {formatPrices(sumAllPrices().toString())} VND */}
                     </div>
                 </div>
-                <Button
-                    text={billInprocessData && billInprocessData !== null ? 'Gọi Thêm' : "Gọi Luôn"}
-                    icPosition='right'
-                    // bgIcon='#EA5958'
-                    icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" class="w-6 h-6">
+                <div className=''>
+                    <Button
+                        text={billInprocessData && billInprocessData !== null ? 'Gọi Thêm' : "Gọi Luôn"}
+                        icPosition='right'
+                        // bgIcon='#EA5958'
+                        icon={`<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" class="w-6 h-6">
                             <path strokeLinecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         `}
-                    onclick={() => {
-                        if (data) {
-                            billInprocessData && billInprocessData !== null
-                                ? mergeDataAndUpdateBill(data ? JSON.parse(data) : [], billInprocessData)
-                                : createBill(JSON.parse(data));
-                        } else {
-                            console.error('Error: Data is null');
+                        onclick={() => {
+                            if (data) {
+                                if (billInprocessData && billInprocessData !== null) {
+                                    mergeDataAndUpdateBill(data ? JSON.parse(data) : [], billInprocessData)
+                                } else {
+                                    if (table) {
+                                        createBill(JSON.parse(data));
+                                    } else {
+                                        notifications('danger', "Chua chon ban")
+                                    }
+                                }
+                            } else {
+                                notifications('danger', "Chua co mon");
+                            }
                         }
-                    }
-                    }
-                />
+                        }
+                    />
+                </div>
             </div>
 
 

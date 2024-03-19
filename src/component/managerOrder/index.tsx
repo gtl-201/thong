@@ -170,9 +170,11 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
             console.log(error);
         });
     }
-    const updateStatusBill = (idBill: string, collection: string) => {
+    const updateStatusBill = (idBill: string, collection: string, table: string) => {
         const newData = billData.map(bill => {
             if (bill.id === idBill) {
+                const dataTableUpdate = { id: table, enable: true }
+                firestore.update('table', table, dataTableUpdate)
                 return { ...bill, status: 'pay' };
             }
             return bill;
@@ -189,10 +191,11 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
         });
     }
 
-    const removeBill = (idBill: string) => {
+    const removeBill = (idBill: string, table: string) => {
         firestore.delete('bill', idBill).then(() => {
             setBillData(prevBillData => prevBillData.filter(bill => bill.id !== idBill));
-            console.log("Bill removed from dataBill");
+            const dataTableUpdate = { id: table, enable: true }
+            firestore.update('table', table, dataTableUpdate)
         }
         ).catch(error => {
             console.error('Error fetching data:', error);
@@ -203,27 +206,35 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
         localStorage.setItem('idBill', idBill)
     }
 
-
+    const addMoreBill = () => {
+        localStorage.removeItem('idBill')
+    }
 
     return (
         <div className="flex flex-wrap w-[100%] md:w-[95%] lg:w-[60rem] justify-center">
             {/* Các Món Đã Gọi */}
-            <div className='w-full flex justify-start mb-2 ml-4'>
-                <div className='font-Fredoka font-semibold text-[20px] uppercase mr-2 w-16'>Status</div>
-                <select
-                    id="sort"
-                    className="px-3 block w-36 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
-                    onChange={(e) => {
-                        setSortByStatus(e.target.value)
-                        getBillInprocess(e.target.value)
-                    }}
-                    value={sortByStatus}
-                >
-                    <option value={'unPay'} defaultChecked>Inprocess</option>
-                    <option value={'pay'}>Payed</option>
-                    <option value={'all'}>All</option>
-                </select>
+            <div className='w-full flex justify-between mb-2 ml-4'>
+                <div className='flex justify-start items-center'>
+                    <div className='font-Fredoka font-semibold text-[20px] uppercase mr-2 w-16'>Status</div>
+                    <select
+                        id="sort"
+                        className="px-3 block w-36 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                        onChange={(e) => {
+                            setSortByStatus(e.target.value)
+                            getBillInprocess(e.target.value)
+                        }}
+                        value={sortByStatus}
+                    >
+                        <option value={'unPay'} defaultChecked>Inprocess</option>
+                        <option value={'pay'}>Payed</option>
+                        <option value={'all'}>All</option>
+                    </select>
+                </div>
+                <Link to='/allMenu' className='mb-2'>
+                    <Button text='Thêm Hoá Đơn' textSize='16px' onclick={() => addMoreBill()}></Button>
+                </Link>
             </div>
+
             {/* <div className='w-full flex justify-start mb-2'>
                 <div className='font-Fredoka font-semibold text-[20px] uppercase mr-2 w-16'>Table</div>
                 <select
@@ -245,11 +256,9 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                         <div className='px-5 w-full py-5 mb-4 border-2 rounded-lg relative'>
                             <div
                                 onClick={() => {
-                                    removeBill(item.id)
-                                    // console.log(billsInDay);
-
+                                    removeBill(item.id, item.table)
                                 }}
-                                className='absolute bg-red-500 px-2 rounded-lg text-white py-1 top-2 right-2 cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
+                                className='absolute bg-red-500 px-2 rounded-lg text-white py-1 top-2 right-2 cursor-pointer font-Fredoka font-normal text-[18px] hover:scale-110 duration-200'
                             >Xoá hđ</div>
                             <div className='font-Fredoka font-semibold text-[21px] w-full uppercase text-gray-500 flex justify-start items-center'>
                                 <div className='w-4 h-4 bg-yellow-400 rounded-full mr-2'></div>
@@ -318,7 +327,7 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                                     <Link to='/allMenu' className='mb-2'>
                                         <Button onclick={() => addMoreFood(item.id)} text='Thêm món' textSize='20px' bg='#3CA0F5'></Button>
                                     </Link>
-                                    <Button onclick={() => updateStatusBill(item.id, 'bill')} text='Thanh toán' textSize='20px' bg='#41A146'></Button>
+                                    <Button onclick={() => updateStatusBill(item.id, 'bill', item.table)} text='Thanh toán' textSize='20px' bg='#41A146'></Button>
                                 </div>}
                             </div>
                             {/* <div className='tborder-t-2 mt-5'></div> */}
