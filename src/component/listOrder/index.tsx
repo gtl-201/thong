@@ -167,7 +167,10 @@ const ListOrder: React.FC<ListOrderProps> = ({ table, onCreateOrUpdateBill }) =>
                 <div className='font-Fredoka font-semibold text-[21px]'>Các món đã chọn</div>
                 <div
                     className='cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
-                    onClick={() => removeAllItem()}
+                    onClick={() => {
+                        const confirmDelete = window.confirm("Bạn có chắc muốn xoá hóa đơn này không?");
+                        confirmDelete && removeAllItem()
+                    }}
                 >
                     Xoá toàn bộ
                 </div>
@@ -272,7 +275,7 @@ const ListOrder: React.FC<ListOrderProps> = ({ table, onCreateOrUpdateBill }) =>
                         return (
                             <div className='flex w-full justify-between mt-4' key={key}>
                                 <div className='flex'>
-                                    <div className='w-24 h-24 max-h-44 overflow-hidden bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center'>
+                                    <div className='w-24 h-24 max-h-44 overflow-hidden bg-[#5c5b5bbd] rounded-md shadow-md mr-3 flex justify-center items-center'>
                                         <img src={itemBillInprocess.urls && itemBillInprocess.urls.length > 0 ? itemBillInprocess.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                                     </div>
                                     <div className='overflow-hidden'>

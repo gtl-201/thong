@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import Button from '../button';
-import { formatPrices, formatDateByTimeStamp } from '../../utils';
+import { formatPrices, formatDateByTimeStamp, notifications } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
 import { firestore } from '../../firebase';
 import { Link } from 'react-router-dom';
@@ -36,31 +36,50 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
     }, [])
     const getBillInprocess = (sortField?: string) => {
         firestore.get('bill').then(billData_1 => {
-            const sort = (unPayBill: any) => {
-                unPayBill.sort((a: any, b: any) => {
-                    const timeA = a.timeJoin.seconds;
-                    const timeB = b.timeJoin.seconds;
-                    return timeB - timeA;
-                });
-                // console.log(JSON.stringify(unPayBill));
-                // console.log(unPayBill);
-                setBillData(unPayBill)
-            }
             if (sortField === 'all') {
                 const unPayBill = billData_1;
-                sort(unPayBill)
+                sortBills(unPayBill)
             } else if (sortField === 'pay') {
                 const unPayBill = billData_1.filter((bill: any) => bill.status === sortField);
-                sort(unPayBill)
+                sortBills(unPayBill)
             } else {
                 const unPayBill = billData_1.filter((bill: any) => bill.status === 'unPay');
-                sort(unPayBill)
+                sortBills(unPayBill)
             }
-
         }).catch(error => {
             console.error('Error fetching data:', error);
         });
     }
+    const sortBills = (unPayBill: any) => {
+        unPayBill.sort((a: any, b: any) => {
+            const timeA = a.timeJoin.seconds;
+            const timeB = b.timeJoin.seconds;
+            return timeB - timeA;
+        });
+        setBillData(unPayBill);
+    };
+    // const sortBillByStatus = (sortField?: string) => {
+    //     const sort = (unPayBill: any) => {
+    //         unPayBill.sort((a: any, b: any) => {
+    //             const timeA = a.timeJoin.seconds;
+    //             const timeB = b.timeJoin.seconds;
+    //             return timeB - timeA;
+    //         });
+    //         // console.log(JSON.stringify(unPayBill));
+    //         // console.log(unPayBill);
+    //         return(unPayBill)
+    //     }
+    //     if (sortField === 'all') {
+    //         const unPayBill = billData;
+    //         sort(unPayBill)
+    //     } else if (sortField === 'pay') {
+    //         const unPayBill = billData.filter((bill: any) => bill.status === sortField);
+    //         sort(unPayBill)
+    //     } else {
+    //         const unPayBill = billData.filter((bill: any) => bill.status === 'unPay');
+    //         sort(unPayBill)
+    //     }
+    // }
 
 
     const sumAllPrices = (dataSum: any): string => {
@@ -210,14 +229,13 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
         localStorage.removeItem('idBill')
     }
 
-    const [dataOnSearch, setDataOnSearch] = useState<any[]>([]);
     const [searchKeyword, setSearchKeyword] = useState("");
     const searchByTable = (keyword: string) => {
         if (!keyword.trim()) {
-            return;
+            return [];
         }
         const filteredData = billData.filter(item => item.table === keyword);
-        setDataOnSearch(filteredData);
+        return (filteredData);
     }
 
     return (
@@ -269,7 +287,7 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                 </select>
             </div> */}
             {Object.entries(
-                groupBillsByDay(searchKeyword != '' ? dataOnSearch : billData)).map(([day, billsInDay], index: number) => (
+                groupBillsByDay(searchKeyword != '' ? searchByTable(searchKeyword) : billData)).map(([day, billsInDay], index: number) => (
                     <div key={index} className='px-5 w-full mb-6 shadow-xl border-t-2 bg-[#FFFEFA] rounded-lg py-5'>
                         <div className='font-Fredoka font-semibold text-[30px] w-full uppercase flex justify-between items-center'>
                             {`Ngày ${day}`}
@@ -280,10 +298,11 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                                 {item.status !== 'pay'
                                     && <div
                                         onClick={() => {
-                                            removeBill(item.id, item.table)
+                                            const confirmDelete = window.confirm("Bạn có chắc muốn xoá hóa đơn này không?");
+                                            confirmDelete && removeBill(item.id, item.table)
                                         }}
-                                        className='absolute bg-red-500 px-2 rounded-lg text-white py-1 top-2 right-2 cursor-pointer font-Fredoka font-normal text-[18px] hover:scale-110 duration-200'
-                                    >Xoá hđ</div>}
+                                        className='absolute uppercase bg-red-500 px-2 rounded-lg text-white py-1 top-2 right-2 cursor-pointer font-Fredoka font-normal text-[18px] hover:scale-110 duration-200'
+                                    >Xoá HĐ</div>}
 
 
                                 <div className='font-Fredoka font-semibold text-[21px] w-full uppercase text-gray-500 flex justify-start items-center'>
@@ -331,7 +350,13 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                                                 {item.status !== 'pay' && <div
                                                     className='cursor-pointer font-Fredoka font-normal text-[18px] text-red-700 hover:scale-110 duration-200'
                                                     onClick={() => {
-                                                        removeItem(item.id, itemBillInprocess.id, 'bill')
+                                                        const confirmDelete = window.confirm("Bạn có chắc muốn xoá hóa đơn này không?");
+                                                        if(confirmDelete && item.listDishes.length == 1){
+                                                            removeBill(item.id, item.table)
+                                                        }else{
+                                                            removeItem(item.id, itemBillInprocess.id, 'bill')
+                                                        }
+                                                        
                                                     }}
                                                 >
                                                     Xoá
@@ -362,9 +387,12 @@ const ManagerOrder: React.FC<ManagerOrderProps> = () => {
                         ))}
                     </div>
                 ))}
+
             {billData.length == 0
-                ? <div className='text-red-500'>Khong co hoa don nao phu hop</div>
-                : dataOnSearch.length == 0 && searchKeyword != '' && <div className='text-red-500'>Ket qua tim kiem khong ton tai</div>}
+                ? <div className='text-red-500 text-2xl my-10 font-Fredoka capitalize font-medium text-center'>
+                    {sortByStatus === 'all' ? 'Không có hoá đơn nào' : sortByStatus == 'unPay' ? 'Không có hoá đơn nào chưa thanh toán' : 'Không có hoá đơn nào đã thanh toán'}
+                </div>
+                : searchByTable(searchKeyword).length == 0 && searchKeyword != '' && <div className='text-red-500 text-2xl my-10 font-Fredoka capitalize font-medium text-center'>Kết qủa tìm kiếm không tồn tại</div>}
 
         </div>
     );
