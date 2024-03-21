@@ -33,7 +33,7 @@ export default function Order() {
             <div className="font-Fredoka font-semibold text-[30px] text-center my-2">
                 Chuc <span className="text-[#E44F4F]">quy khach</span> ngon mieng
             </div>
-            <div className="flex gap-2 items-center mb-3 mt-1 justify-center">
+            <div className="flex flex-wrap gap-2 items-center w-[100%] md:w-[95%] lg:w-[60rem] mb-3 mt-1 justify-center">
                 {tableInprocess === '' ? (
                     tables.map((table: Table) => (
                         <div className={`relative ${table.enable ? '' : 'opacity-50'}`} key={table.id} onClick={() => handleTableClick(table)}>

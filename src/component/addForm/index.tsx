@@ -161,7 +161,7 @@ const AddForm: React.FC<AddFormProps> = () => {
 
     return (
         <div className="w-full bg-[#F5F5F5] flex flex-col items-center mb-10">
-            {loading && <div className="absolute z-50 flex justify-center bg-[#e8dfdd76] w-full">
+            {loading && <div className="absolute z-40 flex justify-center bg-[#e8dfdd76] w-full">
                 <img src={loadingGif} alt="" className="opacity-50 w-full" />
             </div>}
             <div className="w-full md:w-[50rem] lg:w-[60rem] px-5">

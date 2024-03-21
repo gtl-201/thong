@@ -58,15 +58,7 @@ export default function Home() {
                 loading={loading}
                 data={data}
             />
-            <Link to='/enterCodeAccess' className="my-2 w-full flex justify-end" aria-current="page">
-                <Button text="enterCode"></Button>
-            </Link>
-            <Link to='/addFood' className="my-2 w-full flex justify-end" aria-current="page">
-                <Button text="add Foods"></Button>
-            </Link>
-            <Link to='/managerOrder' className="my-2 w-full flex justify-end" aria-current="page">
-                <Button text="manage order"></Button>
-            </Link>
+            
         </div>
     )
 }

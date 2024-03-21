@@ -26,14 +26,14 @@ const ItemListVertical: React.FC<ItemListVerticalProps> = ({ data, loading }) =>
                             className="flex bg-[#FFFFFF] mb-[2px] px-2 py-3 items-center shadow-lg w-[100%] md:w-[90%] lg:w-[80%] md:rounded-lg md:my-2"
                             onClick={() => AddToOrder(item)}
                         >
-                            <div className="snap-x snap-mandatory w-[7rem] h-[7rem] rounded-lg overflow-hidden">
+                            <div className="snap-x snap-mandatory w-28 h-24 rounded-lg overflow-hidden bg-[#5c5b5bbd] flex justify-center items-center">
                                 {/* {item.urls && item.urls.length > 0 &&
                                     item.urls.map((itemUrl: string) =>
                                         <div className="snap-always snap-center">
                                             <img src={itemUrl ? itemUrl : fakeImg} alt="" className="w-[7rem] h-[7rem]" />
                                         </div>
                                     )} */}
-                                <img src={item.urls[0] ? item.urls[0] : fakeImg} alt="" className="h-[7rem]" />
+                                <img src={item.urls[0] ? item.urls[0] : fakeImg} alt="" className="w-28" />
 
                             </div>
                             <div className="pl-3 w-full flex justify-between items-center">

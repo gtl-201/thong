@@ -4,6 +4,7 @@ import Button from '../button';
 import { formatPrices, notifications, removeAllOrder, removeItemOrder } from '../../utils';
 import fakeImg from '../../assets/loading/blueCatCoffee.gif'
 import { firestore } from '../../firebase';
+import { event } from "../../EventEmitter";
 
 interface ListOrderProps {
     data?: {
@@ -153,6 +154,7 @@ const ListOrder: React.FC<ListOrderProps> = ({ table, onCreateOrUpdateBill }) =>
             console.log(dataTable);
             firestore.update('table', table, dataTable)
             onCreateOrUpdateBill(table);
+            event.emit('storage');
         }).catch(error => {
             console.error('Error fetching data:', error);
         });
@@ -176,7 +178,7 @@ const ListOrder: React.FC<ListOrderProps> = ({ table, onCreateOrUpdateBill }) =>
                 return (
                     <div key={key} className='flex justify-between w-full my-2 px-5'>
                         <div className='flex'>
-                            <div className='w-24 h-24 bg-blue-400 rounded-md shadow-md mr-3 flex justify-center items-center max-h-44 overflow-hidden'>
+                            <div className='w-24 h-24 bg-[#5c5b5bbd] rounded-md shadow-md mr-3 flex justify-center items-center max-h-44 overflow-hidden'>
                                 <img src={item.urls && item.urls.length > 0 ? item.urls[0] : fakeImg} alt="unloaded" className='w-24' />
                             </div>
                             <div className='overflow-hidden'>

@@ -33,7 +33,7 @@ export default function App() {
     <div className='min-h-full h-screen flex flex-col justify-between bg-[#F5F5F5]'>
       <div>
         <Router>
-          <Header />
+          <Header fullAccess={fullAccess} />
           <Routes >
             <Route path="/" Component={Home} />
             <Route path="/allMenu" Component={Menu} />
