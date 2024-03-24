@@ -12,6 +12,7 @@ import AddFood from './container/addFood';
 import AllOrder from './container/allOrder';
 import Header from './component/header';
 import Footer from './component/footer';
+import CrudFood from './container/crudFood';
 
 export default function App() {
   interface DataItem {
@@ -44,6 +45,7 @@ export default function App() {
               <>
                 <Route path="/addFood" Component={AddFood} />
                 <Route path="/managerOrder" Component={AllOrder} />
+                <Route path="/crudFood" Component={CrudFood} />
               </>
             )}
           </Routes>

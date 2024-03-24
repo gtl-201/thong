@@ -37,9 +37,9 @@ const Header: React.FC<HeaderProps> = ({ fullAccess }) => {
                                 <Link to='/enterCodeAccess'
                                     style={{ color: location.pathname == '/enterCodeAccess' ? 'black' : '#7A787A' }}
                                     className="hover:text-black px-3 py-2 text-sm font-medium" aria-current="page">ECode</Link>
-                                <Link to='/addFood'
-                                    style={{ color: location.pathname == '/addFood' ? 'black' : '#7A787A' }}
-                                    className="hover:text-black px-3 py-2 text-sm font-medium" aria-current="page">AFood</Link>
+                                <Link to='/crudFood'
+                                    style={{ color: location.pathname == '/crudFood' ? 'black' : '#7A787A' }}
+                                    className="hover:text-black px-3 py-2 text-sm font-medium" aria-current="page">CrudF</Link>
                                 <Link to='/managerOrder'
                                     style={{ color: location.pathname == '/managerOrder' ? 'black' : '#7A787A' }}
                                     className="hover:text-black px-3 py-2 text-sm font-medium" aria-current="page">MOrder</Link>
@@ -124,10 +124,10 @@ const Header: React.FC<HeaderProps> = ({ fullAccess }) => {
                                 style={{ color: location.pathname == '/enterCodeAccess' ? 'black' : '#7A787A' }}
                                 onClick={() => toggleNavBar(false)}
                                 className="hover:text-black px-3 py-2 text-[30px] font-bold transition-transform" aria-current="page">ECode</Link>
-                            <Link to='/addFood'
-                                style={{ color: location.pathname == '/addFood' ? 'black' : '#7A787A' }}
+                            <Link to='/crudFood'
+                                style={{ color: location.pathname == '/crudFood' ? 'black' : '#7A787A' }}
                                 onClick={() => toggleNavBar(false)}
-                                className="hover:text-black px-3 py-2 text-[30px] font-bold transition-transform" aria-current="page">AFood</Link>
+                                className="hover:text-black px-3 py-2 text-[30px] font-bold transition-transform" aria-current="page">CrudF</Link>
                             <Link to='/managerOrder'
                                 style={{ color: location.pathname == '/managerOrder' ? 'black' : '#7A787A' }}
                                 onClick={() => toggleNavBar(false)}
